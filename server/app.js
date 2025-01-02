@@ -1,6 +1,8 @@
 import express from "express";
 import { connectDB } from "./utils/utilsFunctions.js";
 import { createServer } from 'http';
+import cors from "cors"
+import cookieParser from "cookie-parser";
 
 
 const app = express();
@@ -9,6 +11,10 @@ const app = express();
 const mongouri = 'mongodb://localhost:27017/'
 const port = 3000
 const server = createServer(app);
+
+app.use(express.json());
+app.use(cookieParser());
+app.use(cors());
 
 try {
     connectDB(mongouri)
