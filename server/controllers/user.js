@@ -1,6 +1,7 @@
 import joi from "joi";
 import { User } from "../models/user.js";
 import { ErrorHandler } from "../constant/config.js";
+import { sendToken } from "../utils/features.js";
 
 // const userValidationSchema = joi.object({
 //     name: joi.string().min(3).max(50).required(),

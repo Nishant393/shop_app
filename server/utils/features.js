@@ -20,16 +20,21 @@ const connectDB = (uri) => {
     }
 
 
-const sendTocken = async(req, user,code,message)=>{
-    const tocken =jwt.sign({_id:user._id}, "auth-secret");
+    const sendToken = (res, user, code, message) => {
+        const token = jwt.sign({ _id: user._id },
+            // process.env.JWT_SECRET,
+            "auth-secret",
+        );
+    
+        return res.status(code)
+            .cookie("shop-user-tocken", token, cookieOption)
+            .json({
+                success: true,
+                message,
+                user,
+            });
+    
+    }
 
-    return res.status(200).cookie("shop-user-cookie",tocken,cookieOption)
-    .json({
-        success:true,
-        message,
-        user
-    })
-}
 
-
-export{connectDB , sendTocken}
+export{connectDB , sendToken}
