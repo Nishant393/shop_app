@@ -2,14 +2,16 @@
 import bcrypt from "bcrypt";
 import { User } from "../models/user.js";
 import { ErrorHandler } from "../constant/config.js";
-import { sendToken } from "../utils/features.js";
+import { cookieOption, sendToken } from "../utils/features.js";
 import joi from "joi"
+
 const userValidationSchema = joi.object({
     name: joi.string().min(3).max(50).required(),
     email: joi.string().email().required(),
     mobileNumber: joi.string().pattern(/^[0-9]{10}$/).required(),
     password: joi.string().min(8).required(),
 });
+
 
 const newUser = async (req, res, next) => {
     try {
@@ -36,22 +38,40 @@ const newUser = async (req, res, next) => {
 const login=async(req,res,next)=>{
     const { email, password } = req.body;
     const user = await User.findOne({email}).select("+password");
-    // if (!user) {
-    //     return next(new ErrorHandler("Invalid username or password", 404));
-    // }
+    if (!user) {
+        return next(new ErrorHandler("Invalid username or password", 404));
+    }
 
-    // const isMatch = await bcrypt.compare(password, user.password);
-    // if (!isMatch) {
-    //     return next(new ErrorHandler("Invalid username or password", 404));
-    // }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+        return next(new ErrorHandler("Invalid username or password", 404));
+    }
 
-    sendToken(res, user, 200, `Welcome back ${user}`);
-
-}
-
-
-const getUserDetails = ()=>{
+    sendToken(res, user, 200, `Welcome back ${user.name}`);
 
 }
 
-export { newUser, login };
+const logout = async (req, res, next) => {
+    res.status(200)
+        .cookie("shop-user-tocken", "", { ...cookieOption, maxAge: 0 })
+        .json({ success: true, message: "Logout successful" });
+};
+
+
+const getMyProfile = async (req, res, next) => {
+   try {
+    const user = await User.findById(req.user).select("-password");
+    if (!user) {
+        return next(new ErrorHandler("User not found", 404));
+    }
+    res.status(200).json({
+        "success":true,
+        user,
+    })
+    
+   } catch (error) {
+    return next(new ErrorHandler("unable to get user data", 404))
+   }
+};
+
+export { newUser, login,logout,getMyProfile };

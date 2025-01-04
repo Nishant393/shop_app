@@ -37,4 +37,4 @@ const connectDB = (url) => {
     }
 
 
-export{connectDB , sendToken}
+export{connectDB , sendToken,cookieOption}
