@@ -68,10 +68,12 @@ const getMyProfile = async (req, res, next) => {
         "success":true,
         user,
     })
-    
+
    } catch (error) {
     return next(new ErrorHandler("unable to get user data", 404))
    }
 };
+
+
 
 export { newUser, login,logout,getMyProfile };
