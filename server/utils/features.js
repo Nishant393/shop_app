@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken"
 
 
-const connectDB = (uri) => {
-    mongoose.connect(uri, { dbName: "shopApp" })
+const connectDB = (url) => {
+    mongoose.connect(url, { dbName: "shopApp" })
         .then((data) => console.log(`Connected to DB: ${data.connection.host}`))
         .catch((err) => {
             console.error("Error connecting to DB:", err);

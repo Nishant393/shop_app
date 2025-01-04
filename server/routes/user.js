@@ -2,12 +2,12 @@
 
 import express from "express";
 import { isAuthenticated } from "../middlewares/auth.js";
-import { newUser } from "../controllers/user.js";
+import { login, newUser } from "../controllers/user.js";
 
 const app = express.Router()
 
 app.post("/newuser",newUser);
-app.post("login");
+app.post("/login",login);
 
 app.use(isAuthenticated)
 

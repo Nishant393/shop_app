@@ -1,4 +1,5 @@
 import mongoose, { Schema, model } from "mongoose";
+import { hash } from "bcrypt";
 
 const schema = new Schema({
    name: {
@@ -7,7 +8,7 @@ const schema = new Schema({
    },
    mobileNumber: {
     type: String,
-
+    required:true,
    },
    email: {
       type: String,
@@ -25,7 +26,11 @@ const schema = new Schema({
    timestamps: true
 });
 
-
+schema.pre("save", async function (next) {
+   if (!this.isModified("password")) return next(); 
+   this.password = await hash(this.password, 10);
+   return next(); 
+});
 
 
 

@@ -1,34 +1,57 @@
-import joi from "joi";
+
+import bcrypt from "bcrypt";
 import { User } from "../models/user.js";
 import { ErrorHandler } from "../constant/config.js";
 import { sendToken } from "../utils/features.js";
-
-// const userValidationSchema = joi.object({
-//     name: joi.string().min(3).max(50).required(),
-//     email: joi.string().min(3).max(30).required(),
-//     mobileNumber:joi.number().min(10).required(),
-//     password: joi.string().min(8).required(),
-// });
+import joi from "joi"
+const userValidationSchema = joi.object({
+    name: joi.string().min(3).max(50).required(),
+    email: joi.string().email().required(),
+    mobileNumber: joi.string().pattern(/^[0-9]{10}$/).required(),
+    password: joi.string().min(8).required(),
+});
 
 const newUser = async (req, res, next) => {
     try {
-        const { name, email, mobileNumber, password } = req.body;
-        // const { error } = userValidationSchema.validate(req.body);
-        // if (error) {
-        //     console.log("schema validation error ", error);
-        // }
-        const existingUser =await User.findOne({email});
-        if (existingUser) {
-            return next(new ErrorHandler("Username already exists", 400));
+        const { error } = userValidationSchema.validate(req.body);
+        if (error) {
+            return next(new ErrorHandler(error.details[0].message, 400));
         }
-        const user = await User.create({ name, email,mobileNumber, password});
+
+        const { name, email, mobileNumber, password } = req.body;
+
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return next(new ErrorHandler("Email already exists", 400));
+        }
+        const user = await User.create({ name, email, mobileNumber, password });
+
         sendToken(res, user, 201, "User Created");
-        console.log(user);
     } catch (error) {
-        console.log(error);
-        return next(new ErrorHandler("Failed to create user: " + error.message, 500));
+        console.error(error);
+        return next(new ErrorHandler("Failed to create user", 500));
     }
+};
+
+const login=async(req,res,next)=>{
+    const { email, password } = req.body;
+    const user = await User.findOne({email}).select("+password");
+    // if (!user) {
+    //     return next(new ErrorHandler("Invalid username or password", 404));
+    // }
+
+    // const isMatch = await bcrypt.compare(password, user.password);
+    // if (!isMatch) {
+    //     return next(new ErrorHandler("Invalid username or password", 404));
+    // }
+
+    sendToken(res, user, 200, `Welcome back ${user}`);
 
 }
 
-export {newUser}
+
+const getUserDetails = ()=>{
+
+}
+
+export { newUser, login };
