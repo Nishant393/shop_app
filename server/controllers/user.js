@@ -75,5 +75,11 @@ const getMyProfile = async (req, res, next) => {
 };
 
 
+const getCartDetails = async(req,res,next)=>{
+    
+
+}
+
+
 
 export { newUser, login,logout,getMyProfile };

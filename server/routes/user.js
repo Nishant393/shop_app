@@ -13,6 +13,6 @@ app.post("/logout",logout);
 
 app.use(isAuthenticated)
 app.get("/me", getMyProfile)
-
+app.get("/cartDetails", )
 
 export default app;
