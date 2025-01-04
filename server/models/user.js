@@ -13,7 +13,7 @@ const schema = new Schema(
          type: String,
          required: true,
          unique: true,
-         match: /^[0-9]{10}$/, // Assuming a 10-digit format for validation
+         match: /^[0-9]{10}$/, 
       },
       email: {
          type: String,
@@ -21,13 +21,13 @@ const schema = new Schema(
          required: true,
          trim: true,
          lowercase: true,
-         match: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // Regex for basic email validation
+         match: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 
       },
       password: {
          type: String,
          select: false,
          required: true,
-         minlength: 8, // Enforcing a minimum length for security
+         minlength: 8, 
       },
       isVerified: {
          type: Boolean,
@@ -35,7 +35,7 @@ const schema = new Schema(
       },
       role: {
          type: String,
-         enum: ["user", "admin"], // Roles for different levels of access
+         enum: ["user", "admin"], 
          default: "user",
       },
       resetPasswordToken: {
