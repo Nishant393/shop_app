@@ -5,6 +5,7 @@ import cors from "cors"
 import cookieParser from "cookie-parser";
 import userRoute from "./routes/user.js"
 import { errorMiddleware } from "./middlewares/error.js";
+import { corsOption } from "./utils/constant.js";
 
 
 const app = express();
@@ -17,7 +18,7 @@ const server = createServer(app);
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors(corsOption));
 
 try {
     connectDB(mongourl)

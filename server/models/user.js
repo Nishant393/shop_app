@@ -38,6 +38,7 @@ const schema = new Schema(
          enum: ["user", "admin"], 
          default: "user",
       },
+
       resetPasswordToken: {
          type: String,
          select: false,
@@ -46,6 +47,7 @@ const schema = new Schema(
          type: Date,
          select: false,
       },
+
    },
    {
       timestamps: true,
@@ -70,8 +72,9 @@ schema.methods.generatePasswordResetToken = function () {
 
    this.resetPasswordToken = crypto.createHash("sha256").update(token).digest("hex");
    this.resetPasswordExpires = Date.now() + 5 * 60 * 1000; 
-
    return token;
 };
+
+
 
 export const User = mongoose.models.User || model("User", schema);

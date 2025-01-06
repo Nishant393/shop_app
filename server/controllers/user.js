@@ -74,11 +74,11 @@ const getMyProfile = async (req, res, next) => {
    }
 };
 
+getCartDetails=()=>{
 
-const getCartDetails = async(req,res,next)=>{
     
-
 }
+
 
 
 

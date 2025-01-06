@@ -5,7 +5,7 @@ import SignIn from "./Auth/Auth_Pages/SingIn"
 import Auth from "./Auth/Auth"
 import Home from "./Root/Pages/Home"
 import Contact from "./Root/Pages/Contact"
-import Kart from "./Root/Pages/Kart"
+import Cart from "./Root/Pages/Cart"
 import Like from "./Root/Pages/Like"
 import Products from "./Root/Pages/Products"
 import Orders from "./Root/Pages/Orders"
@@ -21,7 +21,7 @@ const App = () => {
             <Route element={<Root />}>
               <Route index element={<Home />} />
               <Route path="/contact" element={<Contact/>}/>
-              <Route path="/kart" element={<Kart />}/>
+              <Route path="/cart" element={<Cart />}/>
               <Route path="/like" element={<Like />}/>
               <Route path="/products" element={<Products />}/>
               <Route path="/orders" element={<Orders />}/>
