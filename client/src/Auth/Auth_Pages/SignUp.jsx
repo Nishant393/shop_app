@@ -10,21 +10,41 @@ const SignUp = () => {
 
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-
-
   const name = useInputValidation("");
   const password = useInputValidation("");
   const email = ""
   const mobileNumber = ""
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async(e) => {
     e.preventDefault();
+
+    const config = {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const formData = new FormData();
+ 
+    formData.append("name", name.value);
+    formData.append("email", email.value);
+    formData.append("password", password.value);
+    formData.append("mobileNumber", mobileNumber.value);
     try {
-      setIsLoading(true)
+      const { data } = await axios.post(
+        `${server}/user/newuser`,
+        formData,
+        config
+      );
       console.log(data)
-      setIsLoading(false)
+      console.log(formData)
+      
     } catch (error) {
-      console.log(error)
+     console.log(error)
+    } finally {
+      setIsLoading(false);
     }
+    
   };
 
 
@@ -58,7 +78,7 @@ const SignUp = () => {
             fullWidth
             placeholder="email"
             required
-            value={email}
+            value={email.value}
             onChange={email.changeHandler}
             sx={{
               "--Input-radius": "11px",
@@ -71,7 +91,7 @@ const SignUp = () => {
             fullWidth
             placeholder="enter your mobile no."
             required
-            value={mobileNumber}
+            value={mobileNumber.value}
             onChange={mobileNumber.changeHandler}
             sx={{
               "--Input-radius": "11px",
@@ -83,7 +103,7 @@ const SignUp = () => {
           <Input
             fullWidth
             type="password"
-            placeholder="********"
+            placeholder={"password"}
             required
             value={password.value}
             onChange={password.changeHandler}

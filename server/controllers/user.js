@@ -74,10 +74,7 @@ const getMyProfile = async (req, res, next) => {
    }
 };
 
-getCartDetails=()=>{
 
-    
-}
 
 
 
