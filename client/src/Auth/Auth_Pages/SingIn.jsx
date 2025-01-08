@@ -17,6 +17,7 @@ const SignIn = () => {
   const mobileNumber = ""
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("jjrk")
     try {
       setIsLoading(true)
       console.log(data)

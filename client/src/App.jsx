@@ -11,8 +11,11 @@ import Products from "./Root/Pages/Products"
 import Orders from "./Root/Pages/Orders"
 import Root from "./Root/Root"
 import NotFound from "./Root/Pages/NotFound";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
+
+  // 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
 
   return (
     <>
@@ -33,6 +36,8 @@ const App = () => {
             <Route path="*" element={<NotFound/>} /> 
           </Routes>
       </main>
+
+      <Toaster position="top-center" />
     </>
   );
 };
