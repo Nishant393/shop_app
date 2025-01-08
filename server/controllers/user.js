@@ -29,6 +29,11 @@ const newUser = async (req, res, next) => {
         const user = await User.create({ name, email, mobileNumber, password });
 
         sendToken(res, user, 201, "User Created");
+        res.status(201).json({
+            message: "Signup successful",
+            user: { id: user._id, name: user.name, email: user.email, role: user.role },
+            token,
+        });
     } catch (error) {
         console.error(error);
         return next(new ErrorHandler("Failed to create user", 500));
