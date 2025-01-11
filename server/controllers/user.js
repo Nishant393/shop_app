@@ -64,6 +64,7 @@ const logout = async (req, res, next) => {
 
 
 const getMyProfile = async (req, res, next) => {
+    // const {userId} = req.body
    try {
     const user = await User.findById(req.user).select("-password");
     if (!user) {
@@ -79,9 +80,11 @@ const getMyProfile = async (req, res, next) => {
    }
 };
 
+const updateToAdmin = (req,res,next)=>{
+
+}
 
 
 
 
-
-export { newUser, login,logout,getMyProfile };
+export { newUser, login,logout,getMyProfile, updateToAdmin };

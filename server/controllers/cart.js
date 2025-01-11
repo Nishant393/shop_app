@@ -1,6 +1,6 @@
-import { ErrorHandler } from "../constant/config";
-import { Products } from "../models/product";
-import { User } from "../models/user";
+import { ErrorHandler } from "../constant/config.js";
+import { Products } from "../models/product.js";
+import { User } from "../models/user.js";
 
 
 const addToCart = async (req, res, next) => {
@@ -46,3 +46,15 @@ const addToCart = async (req, res, next) => {
         return next(new ErrorHandler("Failed to add product to cart", 500));
     }
 };
+
+
+const getCartDetails = (req,res,next)=>{
+    try {
+        
+    } catch (error) {
+        
+    }
+}
+
+
+export{addToCart, getCartDetails }

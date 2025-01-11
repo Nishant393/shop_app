@@ -1,8 +1,6 @@
 import jwt from "jsonwebtoken";
 import { ErrorHandler } from "../constant/config.js"
 
-
-
 const isAuthenticated =async(req, res, next)=>{
     try {
         const tocken = req.cookies["shop-user-tocken"]

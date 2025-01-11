@@ -4,6 +4,7 @@ import { createServer } from 'http';
 import cors from "cors"
 import cookieParser from "cookie-parser";
 import userRoute from "./routes/user.js"
+import cartRoute from "./routes/cart.js"
 import { errorMiddleware } from "./middlewares/error.js";
 import { corsOption } from "./utils/constant.js";
 
@@ -34,6 +35,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/user",userRoute);
+// app.use("/cart",cartRoute);
 
 
 app.use(errorMiddleware)

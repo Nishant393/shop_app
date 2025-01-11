@@ -4,18 +4,15 @@
 const corsOption = {
     origin: [
         "http://localhost:5173",
-        // "http://localhost:4173",
-        // 'https://chat-app-client-lime-three.vercel.app/',
-        // 'https://chat-app-api-wine.vercel.app/',
+        "http://localhost:4173",
         process.env.CLIENT_URL,
-        process.env.NODE_ENV === 'production' 
     ],
     methods:["GET",
               "POST",
               "PUT",
               "PATCH",
               "DELETE",
-              "OPTIONS" ],
+              "OPTIONS"],
     credentials: true,
 }
 
