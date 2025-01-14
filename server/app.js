@@ -18,7 +18,7 @@ try {
 
 
 const app = express();
-const mongourl = 'mongodb://localhost:27017/'
+const mongoUrl = process.env.mongourl
 const port = 3000
 const server = createServer(app);
 
@@ -29,7 +29,7 @@ app.use(cookieParser());
 app.use(cors(corsOption));
 
 try {
-    connectDB(mongourl)
+    connectDB(mongoUrl)
     
 } catch (error) {
     console.log(error);
