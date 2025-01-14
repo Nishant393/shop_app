@@ -11,27 +11,28 @@ const connectDB = (url) => {
         });
 };
 
-    const cookieOption = {
-        maxAge: 15 * 24 * 60 * 60 * 1000,
-        samesite: "none",
-        httpOnly: true,
-        secure: true,
-    
-    }
+const cookieOption = {
+    maxAge: 15 * 24 * 60 * 60 * 1000,
+    // sameSite: "lax",
+    sameSite: "none",
+    httpOnly: true,
+    secure: true,
+
+}
 
 
     const sendToken = (res, user, code, message) => {
         const token = jwt.sign({ _id: user._id },
-            // process.env.JWT_SECRET,
-            "auth-secret",
+            process.env.jwt_Secret,
         );
-    
+    console.log(token)
         return res.status(code)
             .cookie("shop-user-tocken", token, cookieOption)
             .json({
                 success: true,
                 message,
-                user,
+                token,
+                // user,
             });
     
     }

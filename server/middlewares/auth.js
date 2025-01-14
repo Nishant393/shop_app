@@ -3,12 +3,13 @@ import { ErrorHandler } from "../constant/config.js"
 
 const isAuthenticated =async(req, res, next)=>{
     try {
-        const tocken = req.cookies["shop-user-tocken"]
-        if(!tocken){
+        const token = req.cookies["shop-user-tocken"]
+        if(!token){
             return next(new ErrorHandler("please login to access these routes", 401));
         }
         // change  with env variables 
-        const data=jwt.verify(tocken, "auth-secret");
+        const data=jwt.verify(token, process.env.jwt_Secret);
+        console.log(token)
         req.user =data._id;
     } catch (error) {
         console.log(error);

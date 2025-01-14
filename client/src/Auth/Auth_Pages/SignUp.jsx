@@ -29,7 +29,8 @@ const SignUp = () => {
         password: password.value,
         email: email.value,
         mobileNumber: mobileNumber.value,
-      }).then((e) => {
+      }, {withCredentials:true}
+    ).then((e) => {
         if (e.data.success) {
           navigate("/")
         }

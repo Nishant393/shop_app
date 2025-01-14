@@ -28,12 +28,13 @@ const newUser = async (req, res, next) => {
         }
         const user = await User.create({ name, email, mobileNumber, password });
 
-        sendToken(res, user, 201, "User Created");
-        res.status(201).json({
-            message: "Signup successful",
-            user: { id: user._id, name: user.name, email: user.email, role: user.role },
-            token,
-        });
+        sendToken(res, user, 201, "User Created"); 
+        console.log(user)
+        await user.save()
+        // res.status(201).json({
+        //     message: "Signup successful",
+        //     user: { id: user._id, name: user.name, email: user.email, role: user.role },
+        // });
     } catch (error) {
         console.error(error);
         return next(new ErrorHandler("Failed to create user", 500));
@@ -64,7 +65,7 @@ const logout = async (req, res, next) => {
 
 
 const getMyProfile = async (req, res, next) => {
-    // const {userId} = req.body
+    
    try {
     const user = await User.findById(req.user).select("-password");
     if (!user) {
@@ -72,7 +73,8 @@ const getMyProfile = async (req, res, next) => {
     }
     res.status(200).json({
         "success":true,
-        user,
+        "message":"user profile fetch",
+        "name":user.name,
     })
 
    } catch (error) {

@@ -7,14 +7,21 @@ import userRoute from "./routes/user.js"
 import cartRoute from "./routes/cart.js"
 import { errorMiddleware } from "./middlewares/error.js";
 import { corsOption } from "./utils/constant.js";
+import dotenv  from "dotenv";
+
+try {
+    dotenv.config({ path: "./.env" });
+} catch (error) {
+    console.error("Failed to load environment variables:", error);
+    process.exit(1); // Exit process if .env fails
+}
 
 
 const app = express();
-
-
 const mongourl = 'mongodb://localhost:27017/'
 const port = 3000
 const server = createServer(app);
+
 
 
 app.use(express.json());

@@ -27,7 +27,8 @@ const SignIn = () => {
       await axios.post("http://localhost:3000/user/login", {
         email: email.value,
         password: password.value,
-      }).then((e) => {
+      },{withCredentials:true}
+    ).then((e) => {
         if (e.data.success) {
           navigate("/")
         }
