@@ -65,8 +65,10 @@ const logout = async (req, res, next) => {
 
 
 const getMyProfile = async (req, res, next) => {
-    
+    console.log("me",req)
    try {
+
+    // const {userId}= req.body;
     const user = await User.findById(req.user).select("-password");
     if (!user) {
         return next(new ErrorHandler("User not found", 404));
@@ -75,18 +77,18 @@ const getMyProfile = async (req, res, next) => {
         "success":true,
         "message":"user profile fetch",
         "name":user.name,
+        user
     })
 
    } catch (error) {
+    console.log(error)
     return next(new ErrorHandler("unable to get user data", 404))
    }
 };
 
-const updateToAdmin = (req,res,next)=>{
-
-}
 
 
 
 
-export { newUser, login,logout,getMyProfile, updateToAdmin };
+
+export { newUser, login,logout,getMyProfile };

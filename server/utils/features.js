@@ -31,7 +31,7 @@ const cookieOption = {
             .json({
                 success: true,
                 message,
-                token,
+                // token,
                 // user,
             });
     

@@ -9,8 +9,9 @@ const isAuthenticated =async(req, res, next)=>{
         }
         // change  with env variables 
         const data=jwt.verify(token, process.env.jwt_Secret);
-        console.log(token)
         req.user =data._id;
+        next()
+        
     } catch (error) {
         console.log(error);
         next(error);
