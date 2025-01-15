@@ -14,15 +14,9 @@ app.post("/login", login);
 
 app.use(isAuthenticated)
 
-app.get("/hello",(req,res)=>{
-    res.status(200).json({
-        "mesaage":"hello"
-    })
-})
-
 app.get("/me",getMyProfile)
 
 app.post("/logout", logout);
-// app.get("/cartDetails", )
+app.get("/cartDetails" )
 app.put("/id")
 export default app;

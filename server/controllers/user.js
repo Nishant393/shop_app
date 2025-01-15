@@ -65,7 +65,7 @@ const logout = async (req, res, next) => {
 
 
 const getMyProfile = async (req, res, next) => {
-    console.log("me",req)
+
    try {
 
     // const {userId}= req.body;
@@ -85,6 +85,7 @@ const getMyProfile = async (req, res, next) => {
     return next(new ErrorHandler("unable to get user data", 404))
    }
 };
+
 
 
 
