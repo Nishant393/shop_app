@@ -11,13 +11,31 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
+import { useUserContext } from "../Provider/AuthContext"
+import axios from 'axios';
+import server from '../cofig/config';
 
 const NavBar = () => {
 
   const [open, setOpen] = React.useState(false);
   const { pathname } = useLocation()
   const matches = useMediaQuery('(min-width: 768px)')
-  
+  const { isAuthanticated } = useUserContext()
+  console.log(isAuthanticated)
+
+
+  const handelLogout = async () => {
+    // await axios
+    //   .post("http://localhost:3001/user/logout", { withCredentials: true })
+    //   .then((data) => {
+    //     console.log(data)
+    //   })
+    //   .catch((e) => {
+    //     console.log(e)
+    //   })
+    console.log("helo")
+  }
+
   const toggleDrawer = (inOpen) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
@@ -35,13 +53,18 @@ const NavBar = () => {
         <div>
           {matches ?
             <>
-              <ul className='flex gap-8 ' >
+              <ul className='flex gap-8 h-10 my-auto ' >
                 <li className={`duration-200 ${pathname == "/" ? 'border-b-2' : "border-0"}`}  ><Link to="/">  <HomeIcon />  Home</Link></li>
                 <li className={`duration-200 ${pathname == "/Products" ? 'border-b-2' : "border-0"}`}  ><Link to="/Products"> <SearchIcon /> Products</Link></li>
                 <li className={`duration-200 ${pathname == "/cart" ? 'border-b-2' : "border-0"}`} ><Link to="/cart"><ShoppingCartIcon /></Link></li>
-                <li className={`duration-200 ${pathname == "/sign-up" ? 'border-b-2' : "border-0"}`} ><Link to="/sign-up"> <PersonIcon /> register</Link></li>
-                <li className={`duration-200 ${pathname == "/sign-in" ? 'border-b-2' : "border-0"}`} ><LoginIcon /><Link to="/sign-in">Login</Link> </li>
-                {/* <li> <LogoutIcon fontSize='sm' /> <Link to="/sign-in">Logout</Link> </li> */}
+                <li className={`duration-200 ${isAuthanticated ? "hidden" : "flex"}  ${pathname == "/sign-up" ? 'border-b-2' : "border-0"}`} ><Link to="/sign-up"> <PersonIcon /> register</Link></li>
+                <li className={`duration-200 ${isAuthanticated ? "hidden" : "flex"} ${pathname == "/sign-in" ? 'border-b-2' : "border-0"}`} ><LoginIcon /><Link to="/sign-in">Login</Link> </li>
+                <li onClick={handelLogout} className={`${isAuthanticated ? "flex" : "hidden"} cursor-pointer `} > <LogoutIcon /> Logout </li>
+                <li className=' cursor-pointer'>
+                  <div className='rounded-full h-12 w-12 bg-black text-white flex' >
+                    <h1 className='m-auto' >n</h1>
+                  </div>
+                </li>
               </ul>
             </>
 

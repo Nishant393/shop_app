@@ -59,7 +59,7 @@ const login=async(req,res,next)=>{
 
 const logout = async (req, res, next) => {
     res.status(200)
-        .cookie("shop-user-tocken", "", { ...cookieOption, maxAge: 0 })
+        .cookie("shop-user-tocken", { ...cookieOption, maxAge: 0 })
         .json({ success: true, message: "Logout successful" });
 };
 
