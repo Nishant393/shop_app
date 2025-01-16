@@ -33,21 +33,10 @@ const schema = new Schema(
          type: Boolean,
          default: false,
       },
-      role: {
-         type: String,
-         enum: ["user", "admin"], 
-         default: "user",
-      },
-
-      resetPasswordToken: {
-         type: String,
-         select: false,
-      },
-      resetPasswordExpires: {
-         type: Date,
-         select: false,
-      },
-
+      isAdmin:{
+         type:Boolean,
+         default:false
+     },
    },
    {
       timestamps: true,

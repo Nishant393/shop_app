@@ -19,7 +19,7 @@ try {
 
 const app = express();
 const mongoUrl = process.env.mongourl
-const port = 3001
+const port = process.env.port || 3000
 const server = createServer(app);
 
 

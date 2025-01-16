@@ -2,13 +2,13 @@
 
 
 import express from "express";
-import { isAdmin } from "../middlewares/admin.js";
-import { getAllProducts } from "../controllers/products.js";
+import { createProduct, getAllProducts } from "../controllers/product.js";
+
 
 const app = express.Router()
+app.post("/addnew",createProduct)
 app.get("/allproducts", getAllProducts)
-app.use(isAdmin)
-// app.post("/addnewProduct");
+app.get("/getbyid/:id")
 
 
 

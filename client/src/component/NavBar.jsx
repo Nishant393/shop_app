@@ -25,14 +25,14 @@ const NavBar = () => {
 
 
   const handelLogout = async () => {
-    // await axios
-    //   .post("http://localhost:3001/user/logout", { withCredentials: true })
-    //   .then((data) => {
-    //     console.log(data)
-    //   })
-    //   .catch((e) => {
-    //     console.log(e)
-    //   })
+    await axios
+      .post("http://localhost:3001/user/logout", { withCredentials: true })
+      .then((data) => {
+        console.log(data)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
     console.log("helo")
   }
 

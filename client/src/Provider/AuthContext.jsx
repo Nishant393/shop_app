@@ -26,7 +26,7 @@ function AuthProvider({ children }) {
         id: "",
         name: "",
         email: "",
-        role: "user",
+        // role: "user",
         mobileNumber: ""
     })
     const [isAuthanticated, setIsAuthenticated] = useState(false)
@@ -57,7 +57,7 @@ function AuthProvider({ children }) {
                             id: data?.data.user._id,
                             name: data?.data.user.name,
                             email: data?.data.user.email,
-                            role: data?.data.user.role,
+                            // role: data?.data.user.role,
                             mobileNumber: data?.data.user.mobileNumber,
                         }
                     )
@@ -76,9 +76,9 @@ function AuthProvider({ children }) {
             await axios
                 .get(`${server}user/me`, { withCredentials: true })
                 .then((data) => {
-                    if (data.data.user.role == "admin") {
-                        setIsAdminsAdmin(true)
-                    } else setIsAdmin(false)
+                    // if (data.data.user.role == "admin") {
+                    //     setIsAdmin(true)
+                    // } else setIsAdmin(false)
                 })
                 .catch((e) => {
                     return e
@@ -92,7 +92,8 @@ function AuthProvider({ children }) {
 
     useEffect(() => {
         const myCookie = getCookie("shop-user-tocken");
-        if (myCookie == null && myCookie == "") {
+        console.log(myCookie)
+        if (myCookie == null || myCookie == "") {
             setIsAuthenticated(false)
         } else {
             setIsAuthenticated(true)

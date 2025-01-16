@@ -14,9 +14,7 @@ app.post("/login", login);
 
 app.use(isAuthenticated)
 
-app.get("/me",getMyProfile)
-
+app.get("/me",getMyProfile);
 app.post("/logout", logout);
-app.get("/cartDetails" )
-app.put("/id")
+
 export default app;

@@ -18,12 +18,11 @@ const App = () => {
   // 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
   // git reset --hard
   // https://chatgpt.com/c/677e8336-0140-8011-939b-862c76813d3a
-<<<<<<< HEAD
+// <<<<<<< HEAD
   
-  console.log("hekloi")
-=======
   // console.log("hekloi")
->>>>>>> 65008e8445ce9b94a46ffdd4304bd4a9abaceb22
+  // console.log("hekloi")
+// >>>>>>> 65008e8445ce9b94a46ffdd4304bd4a9abaceb22
   return (
     <>
       <main className="h-screen flex">
