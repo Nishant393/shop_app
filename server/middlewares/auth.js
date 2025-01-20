@@ -4,6 +4,7 @@ import { ErrorHandler } from "../constant/config.js"
 const isAuthenticated =async(req, res, next)=>{
     try {
         const token = req.cookies["shop-user-tocken"]
+        console.log(token)
         if(!token){
             return next(new ErrorHandler("please login to access these routes", 401));
         }
@@ -30,6 +31,6 @@ const isAdmin = (req, res, next) => {
     next();
 };
 
-export{isAdmin}
+// export{isAdmin}
 
 export {isAuthenticated,isAdmin}

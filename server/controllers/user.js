@@ -41,7 +41,7 @@ const newUser = async (req, res, next) => {
     }
 };
 
-const login=async(req,res,next)=>{
+const login = async(req,res,next)=>{
     const { email, password } = req.body;
     const user = await User.findOne({email}).select("+password");
     if (!user) {
@@ -56,6 +56,7 @@ const login=async(req,res,next)=>{
     sendToken(res, user, 200, `Welcome back ${user.name}`);
 
 }
+
 
 const logout = async (req, res, next) => {
     res.status(200)

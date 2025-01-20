@@ -15,7 +15,8 @@ const INITIAL_STATE = {
         mobileNumber: ""
     },
     isAuthanticated: false,
-    isAdmin: false
+    setIsAuthenticated: () => false,
+    isAdmin: false,
 }
 
 const AuthContext = createContext(INITIAL_STATE);
@@ -26,7 +27,7 @@ function AuthProvider({ children }) {
         id: "",
         name: "",
         email: "",
-        // role: "user",
+        role: "user",
         mobileNumber: ""
     })
     const [isAuthanticated, setIsAuthenticated] = useState(false)
@@ -34,17 +35,6 @@ function AuthProvider({ children }) {
     const navigate = useNavigate()
 
 
-    function getCookie(name) {
-        const cookieArr = document.cookie.split(";");
-        for (let cookie of cookieArr) {
-            cookie = cookie.trim();
-            if (cookie.startsWith(`${name}=`)) {
-                return cookie.substring(name.length + 1);
-            }
-
-            return null;
-        }
-    }
 
 
     const getAuthUser = async () => {
@@ -54,60 +44,40 @@ function AuthProvider({ children }) {
                 .then((data) => {
                     setUser(
                         {
+                            ...user,
                             id: data?.data.user._id,
                             name: data?.data.user.name,
                             email: data?.data.user.email,
-                            // role: data?.data.user.role,
+                            role: data?.data.user.role,
                             mobileNumber: data?.data.user.mobileNumber,
                         }
                     )
-                    return data
+                    console.log(data.data.user.role )
+                    if (data?.data.user.role == "admin") {
+                        setIsAdmin(true)
+                    } else { setIsAdmin(false) }
+                    if (data.data.user.id !== "") {
+                        setIsAuthenticated(true)
+                    } 
                 })
                 .catch((e) => {
-                    return e
+                    console.log(e)
                 })
         } catch (error) {
             return error
         }
     }
-
-    const checkAdminAuthenticated = async () => {
-        try {
-            await axios
-                .get(`${server}user/me`, { withCredentials: true })
-                .then((data) => {
-                    // if (data.data.user.role == "admin") {
-                    //     setIsAdmin(true)
-                    // } else setIsAdmin(false)
-                })
-                .catch((e) => {
-                    return e
-                })
-        } catch (error) {
-            return error
-        }
-    }
-
-
 
     useEffect(() => {
-        const myCookie = getCookie("shop-user-tocken");
-        console.log(myCookie)
-        if (myCookie == null || myCookie == "") {
-            setIsAuthenticated(false)
-        } else {
-            setIsAuthenticated(true)
-            checkAdminAuthenticated()
-            getAuthUser()
-        }
-
-    }, [isAuthanticated])
+        getAuthUser()
+    }, [])
     // console.log(user)
 
     const values = {
         user,
         isAdmin,
         isAuthanticated,
+        setIsAuthenticated
     }
     return (
 

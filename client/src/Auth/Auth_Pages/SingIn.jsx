@@ -15,14 +15,12 @@ const SignIn = () => {
   const navigate = useNavigate()
 
 
-  const name = useInputValidation("");
   const password = useInputValidation("");
   const email = useInputValidation("")
-  const mobileNumber = useInputValidation("")
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true)
+    // setIsLoading(true)
     try {
       await axios.post("http://localhost:3000/user/login", {
         email: email.value,
@@ -96,7 +94,6 @@ const SignIn = () => {
             color="primary"
             type="submit"
             fullWidth
-            disabled={isLoading}
             sx={{ fontWeight: "bold", transition: "2s", backgroundColor: "#2196f3", fontSize: "20px", margin: "0px" }}
           >
             Login
