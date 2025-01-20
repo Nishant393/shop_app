@@ -57,9 +57,7 @@ const login = async(req,res,next)=>{
 
 }
 
-
 const logout = async (req, res, next) => {
-    
     try {
         res.status(200)
         .cookie("shop-user-tocken","", { ...cookieOption, maxAge: 0 })
@@ -69,7 +67,6 @@ const logout = async (req, res, next) => {
         // console.log(error)
     }
 };
-
 
 const getMyProfile = async (req, res, next) => {
 

@@ -49,9 +49,9 @@ function AuthProvider({ children }) {
                             mobileNumber: data?.data.user.mobileNumber,
                         }
                     )
-                    console.log(data.data.user.role )
+                    console.log(data.data.user )
                     if (data?.data.user.role == "admin") {
-                        setIsAdmin(false)
+                        setIsAdmin(true)
                     } else { setIsAdmin(false) }
                     if (data.data.user.id !== "") {
                         setIsAuthenticated(true)
