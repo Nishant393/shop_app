@@ -25,7 +25,9 @@ const NavBar = () => {
 
 
   const handelLogout = async () => {
-    console.log("hell")
+    axios.post(`${server}user/logout`,{},{withCredentials:true}).then((data)=>{
+      console.log(data)
+    }).catch((e)=>console.log(e))
   }
 
   const toggleDrawer = (inOpen) => (event) => {
@@ -38,7 +40,6 @@ const NavBar = () => {
   useEffect(() => {
     console.log("isAuthenticated", isAuthanticated)
     console.log("user", user)
-    // console.log("isadmin", isAdmin)
   }, [user])
 
   return (

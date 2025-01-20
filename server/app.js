@@ -36,7 +36,6 @@ try {
     
 }
 
-
 app.get("/", (req, res) => {
     res.json("hello to shop backend");
 });

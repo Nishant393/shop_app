@@ -3,9 +3,6 @@ import React, { createContext, useState, useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import server from '../cofig/config';
 
-
-
-
 const INITIAL_STATE = {
     user: {
         id: "",
@@ -54,7 +51,7 @@ function AuthProvider({ children }) {
                     )
                     console.log(data.data.user.role )
                     if (data?.data.user.role == "admin") {
-                        setIsAdmin(true)
+                        setIsAdmin(false)
                     } else { setIsAdmin(false) }
                     if (data.data.user.id !== "") {
                         setIsAuthenticated(true)
