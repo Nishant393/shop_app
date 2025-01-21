@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+VN:wght@100..400&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -24,6 +25,12 @@
 
 @layer utilities {
     /* TYPOGRAPHY */
+    .playwrite-vn-h1 {
+      font-family: "Playwrite VN", serif;
+      font-optical-sizing: auto;
+      font-weight: 500;
+      font-style: normal;
+    }
     h1{
       @apply text-white text-[30px] font-bold ;
     }
@@ -125,23 +132,7 @@
   
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
       background: #7878a3;
-    }
-
-    ul{
-      text-transform:capitalize;
-    }
-    ul li {
-      color: #fff;
-      font-weight: 600;
-      transition: .5s;
-    }
-
-    ul li:hover{
-      /* color: #80d8ff; */
-      /* text-shadow:  */
-      text-shadow: aqua 3px 0px 4px;
-      font-weight: bold;
-    
+  
     }
 
     .nav{

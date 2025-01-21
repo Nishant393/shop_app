@@ -21,7 +21,7 @@ const NavBar = () => {
   const [open, setOpen] = React.useState(false);
   const { pathname } = useLocation()
   const matches = useMediaQuery('(min-width: 768px)')
-  const { user, isAuthanticated , setIsAuthenticated } = useUserContext()
+  const { user, isAuthanticated , setIsAuthenticated , is } = useUserContext()
 
 
   const handelLogout = async () => {
@@ -64,7 +64,11 @@ const NavBar = () => {
     console.log("user", user)
   }, [handelLogout , isAuthanticated])
 
+
+  // isA
+
   return (
+    
     <nav className="bg-blue-600 w-screen p-4">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
         {/* Left side menu items */}
