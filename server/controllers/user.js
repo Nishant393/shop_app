@@ -43,6 +43,8 @@ const newUser = async (req, res, next) => {
 
 const login = async(req,res,next)=>{
     const { email, password } = req.body;
+    try {
+        
     const user = await User.findOne({email}).select("+password");
     if (!user) {
         return next(new ErrorHandler("Invalid username or password", 404));
@@ -54,14 +56,31 @@ const login = async(req,res,next)=>{
     }
 
     sendToken(res, user, 200, `Welcome back ${user.name}`);
+        
+    } catch (error) {
+        console.log(error);
+        return next(new ErrorHandler("invalid credentials ", 404))
+        
+    }
 
 }
 
 
 const logout = async (req, res, next) => {
-    res.status(200)
-        .cookie("shop-user-tocken", { ...cookieOption, maxAge: 0 })
-        .json({ success: true, message: "Logout successful" });
+    try {
+        res.status(200)
+            .cookie("shop-user-tocken", "", {    
+                ...cookieOption,
+                maxAge: 0
+            })
+            .json({
+                success: true,
+                message: "Logout successful"
+            });
+    } catch (error) {
+        console.error('Logout error:', error);
+        return next(new ErrorHandler("Logout failed", 500));
+    }
 };
 
 

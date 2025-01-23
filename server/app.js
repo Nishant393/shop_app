@@ -5,6 +5,7 @@ import cors from "cors"
 import cookieParser from "cookie-parser";
 import userRoute from "./routes/user.js"
 import cartRoute from "./routes/cart.js"
+import productRoute from "./routes/product.js"
 import { errorMiddleware } from "./middlewares/error.js";
 import { corsOption } from "./utils/constant.js";
 import dotenv  from "dotenv";
@@ -42,6 +43,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/user",userRoute);
+app.use("/product",productRoute)
 // app.use("/cart",cartRoute);
 
 

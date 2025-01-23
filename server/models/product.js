@@ -8,10 +8,10 @@ const schema = new Schema(
       },
       stock: {
          type: Number,
-         required: true,
+         // required: true,
          default: 0,
       },
-      price: {
+      price : {
          type: Number,
          required: true,
          min: 0,
@@ -30,11 +30,11 @@ const schema = new Schema(
       productUrl: {
          public_id: {
             type: String,
-            required: true,
+            // required: true,
          },
          url: {
             type: String,
-            required: true,
+            // required: true,
          },
       },
 

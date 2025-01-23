@@ -71,7 +71,7 @@ function AuthProvider({ children }) {
     useEffect(() => {
         getAuthUser()
     }, [])
-    // console.log(user)
+    console.log(user)
 
     const values = {
         user,

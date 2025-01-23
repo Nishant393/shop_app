@@ -1,13 +1,14 @@
-import { Product } from "../models/product.js";
+import {Products} from "../models/product.js";
 
 // Validation schema for products
 
 
 const createProduct = async (req, res, next) => {
     try {
-        const createdProduct = new Product(req.body);
+        const createdProduct = new Products(req.body);
         console.log(req.body)
         await createdProduct.save()
+        console.log("product in db",createdProduct)
         return res.status(200).json({
             message: "product added successfully ",
             createdProduct
@@ -17,9 +18,6 @@ const createProduct = async (req, res, next) => {
         console.log(error);
     }
 }
-
-
-
 
 
 const getAllProducts = async (req, res, next) => {

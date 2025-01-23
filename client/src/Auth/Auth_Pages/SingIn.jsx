@@ -20,7 +20,7 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // setIsLoading(true)
+    setIsLoading(true)
     try {
       await axios.post("http://localhost:3000/user/login", {
         email: email.value,

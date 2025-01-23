@@ -10,15 +10,12 @@ const connectDB = (url) => {
             process.exit(1);
         });
 };
-
 const cookieOption = {
-    maxAge: 15 * 24 * 60 * 60 * 1000,
-    // sameSite: "lax",
+    maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
     sameSite: "none",
     httpOnly: true,
-    secure: true,
-
-}
+    secure: true,                       // Explicitly set cookie path
+};
 
 
     const sendToken = (res, user, code, message) => {
@@ -31,7 +28,7 @@ const cookieOption = {
             .json({
                 success: true,
                 message,
-                // token,
+                token,
                 // user,
             });
     

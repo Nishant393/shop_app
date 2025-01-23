@@ -8,7 +8,6 @@ const isAuthenticated =async(req, res, next)=>{
         if(!token){
             return next(new ErrorHandler("please login to access these routes", 401));
         }
-        // change  with env variables 
         const data=jwt.verify(token, process.env.jwt_Secret);
         req.user =data._id;
         next()
@@ -22,10 +21,8 @@ const isAuthenticated =async(req, res, next)=>{
 
 
 
-
-
 const isAdmin = (req, res, next) => {
-    if (req.user.role !== "admin") {
+    if (req.user.isAdmin !== "true") {
         return res.status(403).json({ message: "Access denied. Admins only." });
     }
     next();
