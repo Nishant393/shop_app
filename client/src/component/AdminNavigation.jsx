@@ -22,9 +22,8 @@ const AdminNavigation = () => {
                         <Link  className='lowercase' to="/">{user.email}</Link>
                     </div>
                 </div>
-                <Link to={"./"}
-                    className={`flex items-center w-full p-3 hover:bg-gray-100 ${pathname === '/dashboard' ? 'bg-gray-100' : ''
-                        }`}
+                <Link to={"/dashboard"}
+                    className={`flex items-center w-full p-3 hover:bg-gray-100 ${pathname === '/dashboard' ? 'bg-gray-100' : ''}`}
                 >
                     <LayoutDashboard className="mr-2" size={20} />
                     Dashboard

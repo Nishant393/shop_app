@@ -61,7 +61,7 @@ const Contact = () => {
       <Container maxWidth="lg" className="py-16">
         {/* Header Section */}
         <Box className="text-center mb-16">
-          <Typography variant="h2" component="h1" className="text-4xl font-bold mb-4">
+          <Typography variant="h2" component="h1" className="text-4xl text-slate-600 font-bold mb-4">
             Contact Us
           </Typography>
           <Typography variant="subtitle1" className="text-gray-600 max-w-2xl mx-auto">
@@ -97,7 +97,7 @@ const Contact = () => {
                   <Box>
                     <Typography variant="subtitle2" className="font-semibold">Call Us</Typography>
                     <Typography variant="body2" className="text-gray-600">
-                      +1 (555) 123-4567
+                      +91 98818 21005
                     </Typography>
                   </Box>
                 </Box>

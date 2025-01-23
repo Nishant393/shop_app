@@ -15,6 +15,7 @@ import NotFound from "./Root/Pages/NotFound";
 import { Toaster } from "react-hot-toast";
 import Dashboard from "./Root/Pages/Admin/AdminPages/Dashboard";
 import AddProducts from "./Root/Pages/Admin/AdminPages/AddProducts";
+import SendEmail from "./Root/Pages/Admin/AdminPages/SendEmail";
 // import { Dashboard } from "@mui/icons-material";
 // import AddProducts from "./Root/Pages/Admin/AdminPages/";
 
@@ -31,10 +32,10 @@ const App = () => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/like" element={<Like />} />
-            <Route path="/dashboard" element={<Dashboard />}>
-              {/* <Route index element={<Dashboard />} /> */}
-            </Route>
-              <Route path="/add-product" element={<AddProducts />} />
+            {/* <Route index element={<Dashboard />} /> */}
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/add-product" element={<AddProducts />} />
+            <Route path="/send-email" element={<SendEmail />} />
             <Route path="/products" element={<Products />} />
             <Route path="/orders" element={<Orders />} />
           </Route>
