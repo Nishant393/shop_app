@@ -65,24 +65,11 @@ const login = async(req,res,next)=>{
 
 }
 
-
 const logout = async (req, res, next) => {
-    try {
-        res.status(200)
-            .cookie("shop-user-tocken", "", {    
-                ...cookieOption,
-                maxAge: 0
-            })
-            .json({
-                success: true,
-                message: "Logout successful"
-            });
-    } catch (error) {
-        console.error('Logout error:', error);
-        return next(new ErrorHandler("Logout failed", 500));
-    }
+    res.status(200)
+        .cookie("shop-user-tocken", { ...cookieOption, maxAge: 0 })
+        .json({ success: true, message: "Logout successful" });
 };
-
 
 const getMyProfile = async (req, res, next) => {
 
@@ -105,11 +92,6 @@ const getMyProfile = async (req, res, next) => {
     return next(new ErrorHandler("unable to get user data", 404))
    }
 };
-
-
-
-
-
 
 
 export { newUser, login,logout,getMyProfile };

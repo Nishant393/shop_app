@@ -2,9 +2,11 @@ import jwt from "jsonwebtoken";
 import { ErrorHandler } from "../constant/config.js"
 
 const isAuthenticated =async(req, res, next)=>{
+
+    console.log("tocken form isauth",req.cookies)
+    
     try {
         const token = req.cookies["shop-user-tocken"]
-        console.log(token)
         if(!token){
             return next(new ErrorHandler("please login to access these routes", 401));
         }
@@ -13,7 +15,7 @@ const isAuthenticated =async(req, res, next)=>{
         next()
         
     } catch (error) {
-        console.log(error);
+        console.log("Erro r:",error);
         next(error);
     }
 

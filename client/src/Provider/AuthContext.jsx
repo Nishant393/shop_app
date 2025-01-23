@@ -3,9 +3,6 @@ import React, { createContext, useState, useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import server from '../cofig/config';
 
-
-
-
 const INITIAL_STATE = {
     user: {
         id: "",
@@ -52,7 +49,7 @@ function AuthProvider({ children }) {
                             mobileNumber: data?.data.user.mobileNumber,
                         }
                     )
-                    console.log(data.data.user.role )
+                    console.log(data.data.user )
                     if (data?.data.user.role == "admin") {
                         setIsAdmin(true)
                     } else { setIsAdmin(false) }

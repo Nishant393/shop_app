@@ -11,18 +11,29 @@ const connectDB = (url) => {
         });
 };
 const cookieOption = {
+<<<<<<< HEAD
     maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
     sameSite: "none",
     httpOnly: true,
     secure: true,                       // Explicitly set cookie path
 };
+=======
+    // path: "/",
+    maxAge: 15 * 24 * 60 * 60 * 1000,
+    // sameSite: "lax",
+    sameSite: "none",
+    httpOnly: true,
+    secure: true,
+}
+>>>>>>> 16c6993eae6186e0f32ae10ccf4e1460a1e4dce7
 
 
     const sendToken = (res, user, code, message) => {
         const token = jwt.sign({ _id: user._id },
             process.env.jwt_Secret,
         );
-    console.log(token)
+        // console.log(token)
+        // console.log(process.env.jwt_Secret)
         return res.status(code)
             .cookie("shop-user-tocken", token, cookieOption)
             .json({
