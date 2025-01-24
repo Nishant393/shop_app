@@ -51,10 +51,10 @@ const schema = new Schema(
             createdAt: { type: Date, default: Date.now },
          },
       ],
-      averageRating: {
-         type: Number,
-         default: 0,
-      },
+      // averageRating: {
+      //    type: Number,
+      //    default: 0,
+      // },
       discount: {
          type: Number,
          default: 0,
