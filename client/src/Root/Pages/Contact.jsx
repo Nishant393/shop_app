@@ -55,6 +55,7 @@ const Contact = () => {
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
   };
+  // 
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -69,14 +70,14 @@ const Contact = () => {
           </Typography>
         </Box>
 
-        <Grid container spacing={4}>
+        <Grid container spacing={10}>
           {/* Contact Information */}
           <Grid item xs={12} md={5}>
             <Paper className="p-6 mb-4 hover:shadow-lg transition-all duration-300">
               <Typography variant="h5" className="mb-6 font-semibold">
                 Get in Touch
               </Typography>
-              
+
               <Box className="space-y-6">
                 <Box className="flex items-center gap-4 group">
                   <Box className="bg-blue-50 p-3 rounded-full group-hover:bg-blue-100 transition-colors">
@@ -120,7 +121,7 @@ const Contact = () => {
               <Typography variant="h5" className="mb-6 font-semibold">
                 Business Hours
               </Typography>
-              
+
               <Box className="flex items-start gap-4">
                 <Box className="bg-blue-50 p-3 rounded-full">
                   <AccessTime className="text-blue-600" />
@@ -166,76 +167,84 @@ const Contact = () => {
               </Box>
             </Paper>
           </Grid>
-
-          {/* Contact Form */}
-          <Grid item xs={12} md={7}>
-            <Paper className="p-8 hover:shadow-lg transition-all duration-300">
-              <Typography variant="h5" className="mb-6 font-semibold">
-                Send us a Message
-              </Typography>
-
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <Grid container spacing={3}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Full Name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      variant="outlined"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Email Address"
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      variant="outlined"
-                    />
-                  </Grid>
-                </Grid>
-
-                <TextField
-                  fullWidth
-                  label="Subject"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  required
-                  variant="outlined"
-                />
-
-                <TextField
-                  fullWidth
-                  label="Message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  multiline
-                  rows={5}
-                  variant="outlined"
-                />
-
-                <Button
-                  type="submit"
-                  variant="contained"
-                  size="large"
-                  fullWidth
-                  className="bg-blue-600 hover:bg-blue-700 py-3 text-lg"
-                  endIcon={<Send />}
-                >
-                  Send Message
-                </Button>
-              </form>
+          <div className='flex pl-4 align-middle'>
+            <Paper>
+                <h2 className='playwrite-vn-h1 mx-5 my-3 text-2xl' >Business venue</h2>
+              <div style={{alignItems: "center"}} className='h-full flex align-middle'>
+                <iframe className='p-5 ' src={"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3718.600193419486!2d79.0476732745046!3d21.24769698045699!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd4ede6d9555555%3A0x602c02563c3d0c17!2sJhulelal%20Institute%20of%20Technology!5e0!3m2!1sen!2sin!4v1737815239090!5m2!1sen!2sin"} width={"600"} height="450" style={{ border: "0" }} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+              </div>
             </Paper>
-          </Grid>
+          </div>
+        </Grid>
+        {/* Contact Form */}
+        <Grid item xs={12} md={7}>
+          <Paper className="p-8 my-7 hover:shadow-lg transition-all duration-300">
+            <Typography variant="h5" className="mb-6 font-semibold">
+              Send us a Message
+            </Typography>
+
+            <form className='flex gap-4 flex-col' onSubmit={handleSubmit} >
+              <Grid container spacing={3}>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Full Name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Email Address"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    variant="outlined"
+                  />
+                </Grid>
+              </Grid>
+
+              <TextField
+                fullWidth
+                label="Subject"
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
+                required
+                variant="outlined"
+              />
+
+              <TextField
+                fullWidth
+                label="Message"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                required
+                multiline
+                rows={5}
+                variant="outlined"
+              />
+
+              <Button
+                type="submit"
+                variant="contained"
+                size="large"
+                fullWidth
+                className="bg-blue-600 hover:bg-blue-700 py-3 text-lg"
+                endIcon={<Send />}
+              >
+                Send Message
+              </Button>
+            </form>
+          </Paper>
+
         </Grid>
 
         <Snackbar
