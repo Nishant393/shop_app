@@ -4,6 +4,7 @@ import NavBar from '../component/NavBar'
 import { useUserContext } from '../Provider/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import AdminNavigation from '../component/AdminNavigation'
+import Footer from '../component/Footer'
 // import Dashboard from './Pages/Admin/Dashboard'
 
 const Root = () => {
@@ -35,6 +36,7 @@ const Root = () => {
         <>
           <NavBar />
           <Outlet />
+          <Footer/>
         </>}
     </div >
   )

@@ -30,7 +30,7 @@ const ImageCarousel = () => {
   }, [currentSlide]);
 
   return (
-    <div className="relative w-full my-3 max-w-4xl mx-auto overflow-hidden">
+    <div className="relative w-full h-3/4 my-3 max-w-4xl mx-auto overflow-hidden">
       <div className="absolute z-10 flex space-x-2 bottom-4 left-1/2 transform -translate-x-1/2">
         {slides.map((_, index) => (
           <button
