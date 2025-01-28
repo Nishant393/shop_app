@@ -21,21 +21,38 @@ const createProduct = async (req, res, next) => {
 
 
 
-const searchProduct= async(req,res,next)=>{
+const searchProduct = async (req, res, next) => {
     try {
-        const {productName}=req.query;
-        const searchedProduct =await Products.find(productName);
-        res.status(200).json({
-            success:true,
-            searchedProduct
-        })
-
+        const { productName="",limit=20,page=1 } = req.query;
         
-    } catch (error) {
-        console.log(error)
-    }
 
-}
+        const searchedProduct = await Products.find({
+            productName: { $regex: productName, $options: "i" }
+        }).skip((page - 1) * limit)
+        .limit(parseInt(limit));
+
+        console.log(searchedProduct)
+
+        // if (searchedProduct.length === 0) {
+        //     return res.status(404).json({
+        //         success: false,
+        //         message: "No products found"
+        //     });
+        // }
+
+        res.status(200).json({
+            success: true,
+            searchedProduct
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: "Server error"
+        });
+    }
+};
+
 
 const getProductById=async(req,res,next)=>{
     try {
