@@ -4,6 +4,9 @@ import { Autocomplete, Button, Input, Option, Select, Textarea } from '@mui/joy'
 import { useDropzone } from 'react-dropzone'
 
 import SvgIcon from '@mui/joy/SvgIcon';
+import axios from 'axios';
+import server from '../../../../cofig/config';
+import toast from 'react-hot-toast';
 
 
 const AddProducts = () => {
@@ -11,7 +14,7 @@ const AddProducts = () => {
 
     const [file, setFile] = useState([])
     const [fileUrl, setFileUrl] = useState('')
-    const [loading, setLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const [product, setProduct] = useState({
         productName: "",
         stock: 0,
@@ -19,12 +22,24 @@ const AddProducts = () => {
         description: "",
         category: "",
         brand: "",
-        productUrl: [],
     })
 
     const handelSubmit = async () => {
         try {
         console.log("submit")
+        await axios.post(`${server}product/addnew`,product)
+            .then((e) => {
+                setIsLoading(false)
+                console.log("false")
+                console.log(e.data.success)
+                console.log(e.data.message)
+                toast.success(e.data.message);
+              }).catch((e) => {
+                  setIsLoading(false)
+                toast.error(e.response.data.error.message);
+                console.log(e.response.data.error.message)
+                console.log(e.response.data.success)
+              })
         } catch (error) {
             console.log(error)
         }
@@ -33,7 +48,7 @@ const AddProducts = () => {
           if (!isDragReject) console.log("something went wrong !!")
         console.log(acceptedFiles, URL.createObjectURL(acceptedFiles[0]))
         setFile(acceptedFiles)
-        setProduct({...product , productUrl: URL.createObjectURL(acceptedFiles[0])})
+        setFileUrl(URL.createObjectURL(acceptedFiles[0]))
     }, [])
 
     const { getRootProps, getInputProps, isDragReject } = useDropzone({
@@ -63,7 +78,7 @@ const AddProducts = () => {
         <div className=' w-full my-5 lg:w-3/4  mx-auto flex rounded-lg shadow-lg justify-center bg-white  flex-col align-middle'>
             <h1 className='playwrite-vn-h1 text-slate-900 my-4 mx-auto' >Add Product</h1>
             <div className=' w-full mx-auto' >
-                <form onSubmit={handelSubmit} className='flex gap-5 px-7 flex-col' >
+                <form   className='flex gap-5 px-7 flex-col' >
                     <div>
                         <span className='text-slate-600' >Product Name</span>
                         <Input
@@ -151,10 +166,10 @@ const AddProducts = () => {
                         <div {...getRootProps()} className=' flex flex-center rounded-3xl cursor-pointe' >
                             <input {...getInputProps()} className=' cursor-pointer' />
                             {
-                                product.productUrl ? (
+                                fileUrl ? (
                                     <div className=' flex flex-col w-full p-5 lg:p-10'>
                                         <img
-                                            src={product.productUrl}
+                                            src={fileUrl}
                                             alt='uplode img'
                                             className='file_uploder-img'
                                         />
@@ -196,7 +211,7 @@ const AddProducts = () => {
                         </div>
                         <span className='text-zinc-700 mx-auto' >Drop & Down </span>
                     </div>
-                    <Button halfWidth sx={{ padding: "6px", margin: "30px" }} loading={loading} > Submit </Button>
+                    <Button halfWidth onClick={handelSubmit} type='submit'  sx={{ padding: "6px", margin: "30px" }} loading={isLoading} > Submit </Button>
                 </form>
             </div>
         </div>

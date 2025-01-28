@@ -1,28 +1,36 @@
 import React, { useEffect } from 'react'
 import { useUserContext } from '../../Provider/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import SearchProducts from '../../component/SearchProducts'
+import { CategoryOutlined } from '@mui/icons-material'
+import Category from '../../component/Category'
+import Courcel from '../../component/Courcel'
+import TopProduct from '../../component/TopProduct'
 
 
 const Home = () => {
 
-const { isAdmin } = useUserContext()
-console.log(isAdmin)
-const navigate = useNavigate()
+  const { isAdmin } = useUserContext()
+  console.log(isAdmin)
+  const navigate = useNavigate()
 
-useEffect(()=>{
+  useEffect(() => {
     isAdmin ? navigate("/dashboard") : ""
-
-},[])
+  }, [])
 
   return (
+    <div className='flex flex-col gap-8' > 
+      <div className='max-h-screen bg-stone-50' >
+        <div className='bg-white shadow-md flex gap-2 w-full justify-center align-middle p-4'  >
           <div>
-            {
-
-              console.log("isAdmin")
-
-            }
-            Home
-            </div>
+          <SearchProducts/>
+          <Category/>
+          </div>
+        </div>
+        <Courcel/>
+      </div>
+      <TopProduct/>
+    </div>
   )
 }
 
