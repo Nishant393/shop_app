@@ -11,7 +11,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
-import AuthProvider, { useUserContext } from "../Provider/AuthContext"
+import { useUserContext } from "../Provider/AuthContext"
 import axios from 'axios';
 import { Home, ShoppingCart, Heart, User } from 'lucide-react';
 import server from '../cofig/config';
@@ -98,7 +98,7 @@ const NavBar = () => {
               <Link to="/sign-up" className={`${isAuthanticated ? "hidden" : " flex"} text-white flex items-center gap-2 hover:text-blue-200`}>
                 <span>register</span>
               </Link>
-              <li onClick={handelLogout} className={`${isAuthanticated ? "flex" : "hidden"} text-white flex items-center gap-2 hover:text-blue-200`}>
+              <li onClick={handelLogout} className={`${isAuthanticated ? "flex" : "hidden"} text-white cursor-pointer flex items-center gap-2 hover:text-blue-200`}>
                 <LogoutIcon size={10} />
                 <span>Logout</span>
               </li>
@@ -108,7 +108,7 @@ const NavBar = () => {
               <Link to="/contact" className={`${pathname == "/contact" ? "text-cyan-200" : ''} text-white flex items-center gap-2 hover:text-blue-200`}>
                 <span>Contact</span>
               </Link>
-              <Link to={"/profile"} className=" cursor-pointer flex items-center">
+              <Link to={"/account"} className=" cursor-pointer flex items-center">
                 <div className="bg-white rounded-full h-10 w-10 flex items-center justify-center">
                   <span className="text-blue-600 font-bold text-xl">N</span>
                 </div>

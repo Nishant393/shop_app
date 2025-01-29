@@ -17,6 +17,9 @@ import Dashboard from "./Root/Pages/Admin/AdminPages/Dashboard";
 import AddProducts from "./Root/Pages/Admin/AdminPages/AddProducts";
 import SendEmail from "./Root/Pages/Admin/AdminPages/SendEmail";
 import ProductItem from "./Root/Pages/ProductItem";
+import ProductManagement from "./Root/Pages/Admin/AdminPages/ProductManagement";
+import Notification from "./Root/Pages/Admin/AdminPages/Notification";
+import Profile from "./Root/Pages/Profile";
 // import { Dashboard } from "@mui/icons-material";
 // import AddProducts from "./Root/Pages/Admin/AdminPages/";
 
@@ -36,7 +39,9 @@ const App = () => {
             <Route path="/p/:id" element={<ProductItem/>} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/add-product" element={<AddProducts />} />
-            <Route path="/send-email" element={<SendEmail />} />
+            <Route path="/m" element={<ProductManagement />} />
+            <Route path="/notification" element={<Notification />} />
+            <Route path="/account" element={<Profile />} />
             <Route path="/products" element={<Products />} />
             <Route path="/orders" element={<Orders />} />
           </Route>

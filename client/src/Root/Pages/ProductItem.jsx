@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Heart, ShoppingCart, Check, Star } from 'lucide-react'
+import { Heart, ShoppingCart, Check, Star, FenceIcon } from 'lucide-react'
 import axios from 'axios'
-import toast from 'react-hot-toast'
 import server from '../../cofig/config'
+import FeedBack from '../../component/FeedBack'
+import Box from '@mui/material/Box';
+import Rating from '@mui/material/Rating';
+import Typography from '@mui/material/Typography';
+
 
 const ProductItem = () => {
   const [product, setProduct] = useState({
-    productName: "Premium Ghee",
-    stock: 3,
-    price: "200",
-    description: "Pure and traditional ghee, crafted with authentic methods to preserve natural goodness.",
-    category: "Dairy Products",
-    brand: "Traditional Farms",
-    productURL: "sample-image-url"
+    productName: "",
+    stock: 0,
+    price: "0",
+    description: "",
+    category: "",
+    brand: "",
+    productURL: ""
   })
-  
+
   const { id } = useParams()
   const [isLoading, setIsLoading] = useState(true)
 
@@ -23,10 +27,10 @@ const ProductItem = () => {
     try {
       const response = await axios.get(`${server}product/getbyid/${id}`)
       setProduct(response.data.result)
+      console.log(response.data.result)
       setIsLoading(false)
     } catch (error) {
       setIsLoading(false)
-      toast.error(error.response?.data?.error?.message || 'Failed to fetch product')
     }
   }
 
@@ -48,21 +52,21 @@ const ProductItem = () => {
         {/* Product Image Section */}
         <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center">
           <div className="relative group">
-            <img 
-              src={product.productURL || "https://rukminim2.flixcart.com/image/280/280/kkwwu4w0/edible-oil/c/b/s/lite-pouch-sunflower-oil-priya-original-imagy5hsjbqyfhhh.jpeg?q=70"} 
+            <img
+              src={"https://rukminim2.flixcart.com/image/280/280/kkwwu4w0/edible-oil/c/b/s/lite-pouch-sunflower-oil-priya-original-imagy5hsjbqyfhhh.jpeg?q=70" || product.productURL}
               alt={product.productName}
               className="max-w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105"
             />
             <div className="absolute top-2 right-2 flex space-x-2">
               <div className="bg-yellow-100 text-yellow-600 p-2 rounded-full flex items-center">
                 <Star className="w-5 h-5 fill-current" />
-                <span className="ml-1 text-sm">4.5</span>
+                <span className="ml-1 text-sm"></span>
               </div>
             </div>
           </div>
-          
+
           <div className="mt-6 w-full flex space-x-4">
-            <button 
+            <button
               className="flex-1 flex items-center justify-center 
                 bg-gradient-to-r from-blue-400 to-blue-600 
                 text-white 
@@ -75,8 +79,8 @@ const ProductItem = () => {
               <ShoppingCart className="mr-2 group-hover:scale-110 transition-transform" />
               Add to Cart
             </button>
-            
-            <button 
+
+            <button
               className="flex-1 flex items-center justify-center 
                 bg-gradient-to-r from-rose-400 to-rose-600 
                 text-white 
@@ -95,7 +99,7 @@ const ProductItem = () => {
         {/* Product Details Section */}
         <div className="bg-white shadow-lg rounded-lg p-6">
           <h1 className="text-3xl font-bold text-slate-900 mb-4">{product.productName}</h1>
-          
+
           <div className="flex items-center mb-4">
             <h2 className="text-3xl text-green-600 font-semibold mr-4">₹{product.price}</h2>
             <span className="line-through text-slate-500">₹{parseInt(product.price) + 50}</span>
@@ -121,14 +125,14 @@ const ProductItem = () => {
                 <span className="text-slate-600">Availability:</span>
                 <p className="font-medium flex  items-center">
                   {console.log(product.stock)}
-                  {product.stock !== 0 ? 
-                     <>
-                     <Check className="text-green-500 mr-2" /> In Stock
-                     </> 
-                  : 
-                  <>
-                   <span className='text-rose-600' >Out of Stock</span> 
-                  </>
+                  {product.stock !== 0 ?
+                    <>
+                      <Check className="text-green-500 mr-2" /> In Stock
+                    </>
+                    :
+                    <>
+                      <span className='text-rose-600' >Out of Stock</span>
+                    </>
                   }
                 </p>
               </div>
@@ -136,12 +140,17 @@ const ProductItem = () => {
           </div>
 
           <div className="flex space-x-4">
-            <button 
+            <button
               className="flex-1 bg-emerald-500 text-white py-3 rounded-lg hover:bg-emerald-600 transition-colors"
             >
               Buy Now
             </button>
           </div>
+        </div>
+      </div>
+      <div className='flex justify-center my-5' >          
+        <div className='bg-white w-3/4 p-7 flex justify-center shadow-lg rounded-lg' >
+          <FeedBack />
         </div>
       </div>
     </div>

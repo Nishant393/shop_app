@@ -19,8 +19,8 @@ const Home = () => {
   }, [])
 
   return (
-    <div className='flex flex-col gap-8' > 
-      <div className='max-h-screen bg-stone-50' >
+    <div className='flex flex-col' > 
+      <div className='min-h-screen bg-stone-50' >
         <div className='bg-white shadow-md flex gap-2 w-full justify-center align-middle p-4'  >
           <div>
           <SearchProducts/>

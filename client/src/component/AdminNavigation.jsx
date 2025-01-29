@@ -4,9 +4,7 @@ import { useUserContext } from '../Provider/AuthContext';
 import { Image, LayoutDashboard, Mail, Plus, ShoppingBag } from 'lucide-react';
 
 const AdminNavigation = () => {
-    // const [pathname, setpathname] = useState('dashboard');
     const { pathname } = useLocation()
-    console.log(pathname)
 
     const { user } = useUserContext()
     return (
@@ -47,7 +45,7 @@ const AdminNavigation = () => {
                         }`}
                 >
                     <Mail className="mr-2" size={20} />
-                    Send Email
+                    Send Notification
                 </Link>
                 <Link to={"product-management"}
                     className={`flex items-center w-full p-3 hover:bg-gray-100 ${pathname === 'product-management' ? 'bg-gray-100' : ''
