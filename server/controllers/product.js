@@ -115,5 +115,35 @@ const getAllProducts =async (req, res,next) => {
     }
 };
 
-export { createProduct, getAllProducts, searchProduct,getProductById };
+const deleteById = async(req,res,next)=>{
+    try {
+        const {id}=req.params;
+        const unDeleted=await Products.findByIdAndDelete(id,).populate('productName')
+        res.status(200).json({
+            success:true,
+            message:"product deleted successfully",
+            unDeleted
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:'Error restoring product, please try again later'})
+    }
+}
+const updateById = async(req,res,next)=>{
+    try {
+
+        const {id}=req.body;
+        const updatedData=await Products.findByIdAndUpdate(id,).populate('productName')
+        res.status(200).json({
+            success:true,
+            message:"product deleted successfully",
+            updateById
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:'Error restoring product, please try again later'})
+    }
+}
+
+export { createProduct, getAllProducts, searchProduct,getProductById,deleteById ,updateById};
 

@@ -1,51 +1,34 @@
 import { ErrorHandler } from "../constant/config.js";
+import { Cart } from "../models/cart.js";
 import { Products } from "../models/product.js";
 import { User } from "../models/user.js";
 
 
-const addToCart = async (req, res, next) => {
+const addToCart = async (req, res) => {
     try {
-        const { productId, quantity } = req.body;
+        const {userId, productId, quantity } = req.body;
+        // const userId = req.user.id; // Assuming user ID is available from authentication middleware
 
-        if (!productId || !quantity || quantity <= 0) {
-            return next(new ErrorHandler("Invalid product or quantity", 400));
-        }
+        let cartItem = await Cart.findOne({ user: userId, product: productId });
 
-        const product = await Products.findById(productId);
-        if (!product) {
-            return next(new ErrorHandler("Product not found", 404));
-        }
-
-        if (product.stock < quantity) {
-            return next(new ErrorHandler("Not enough stock available", 400));
-        }
-
-        const user = await User.findById(req.user);
-        if (!user) {
-            return next(new ErrorHandler("User not found", 404));
-        }
-
-        // Check if product is already in cart
-        const existingCartItem = user.cart.find(item => item.product.toString() === productId);
-
-        if (existingCartItem) {
-            existingCartItem.quantity += quantity;
+        if (cartItem) {
+            cartItem.quantity += quantity || 1;
+            await cartItem.save();
         } else {
-            user.cart.push({ product: productId, quantity });
+            cartItem = new Cart({
+                user: userId,
+                product: productId,
+                quantity: quantity || 1,
+            });
+            await cartItem.save();
         }
 
-        await user.save();
-
-        res.status(200).json({
-            success: true,
-            message: "Product added to cart",
-            cart: user.cart,
-        });
+        res.status(200).json({ success: true, message: "Product added to cart", cartItem });
     } catch (error) {
-        console.error(error);
-        return next(new ErrorHandler("Failed to add product to cart", 500));
+        res.status(500).json({ success: false, message: "Server Error", error: error.message });
     }
 };
+
 
 
 const getCartDetails = (req,res,next)=>{
