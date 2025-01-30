@@ -31,11 +31,17 @@ const addToCart = async (req, res) => {
 
 
 
-const getCartDetails = (req,res,next)=>{
+const getCartDetails = async(req,res,next)=>{
     try {
+        const {id} =req.params
+        // const id = req.user
+        const result = await Cart.find({user:id})
         
+        res.status(200).json({
+            result
+        })
     } catch (error) {
-        
+        console.log(error)
     }
 }
 

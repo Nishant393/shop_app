@@ -9,7 +9,7 @@ const app = express.Router()
 
 // app.use(isAuthenticated)
 app.post("/my/addtocart/",addToCart)
-app.get("/my/:id",getCartDetails)
+app.get("/mycart/:id",getCartDetails)
  
 
 export default app;

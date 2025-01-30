@@ -1,14 +1,15 @@
-import express from "express";
-import { connectDB } from "./utils/features.js";
-import { createServer } from 'http';
-import cors from "cors"
+import { v2 as cloudinary } from "cloudinary";
 import cookieParser from "cookie-parser";
-import userRoute from "./routes/user.js"
-import cartRoute from "./routes/cart.js"
-import productRoute from "./routes/product.js"
+import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
+import { createServer } from 'http';
 import { errorMiddleware } from "./middlewares/error.js";
+import cartRoute from "./routes/cart.js";
+import productRoute from "./routes/product.js";
+import userRoute from "./routes/user.js";
 import { corsOption } from "./utils/constant.js";
-import dotenv  from "dotenv";
+import { connectDB } from "./utils/features.js";
 
 try {
     dotenv.config({ path: "./.env" });
@@ -36,6 +37,18 @@ try {
     console.log(error);
     
 }
+
+try {
+    cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
+    });
+} catch (error) {
+    console.error("Failed to configure Cloudinary:", error);
+    process.exit(1); // Exit process if Cloudinary config fails
+}
+
 
 app.get("/", (req, res) => {
     res.json("hello to shop backend");

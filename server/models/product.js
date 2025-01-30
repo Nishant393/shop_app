@@ -11,6 +11,10 @@ const schema = new Schema(
          // required: true,
          default: 0,
       },
+      quantity: {
+         type: String,
+         // required: true,
+      },
       price : {
          type: Number,
          required: true,
