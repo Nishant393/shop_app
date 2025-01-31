@@ -76,7 +76,8 @@ const getMyProfile = async (req, res, next) => {
    try {
 
     // const {userId}= req.body;
-    const user = await User.findById(req.user).select("-password");
+    const user = await User.findById(req.user)
+    // .select("-password");
     if (!user) {
         return next(new ErrorHandler("User not found", 404));
     }
@@ -93,5 +94,30 @@ const getMyProfile = async (req, res, next) => {
    }
 };
 
+const changeUserToAdmin = async (req, res, next) => {
+    try {
+        const { id } = req.params; 
 
-export { newUser, login,logout,getMyProfile };
+        // Only an admin can change roles
+        if (!req.user.isAdmin) {
+            return next(new ErrorHandler("Access denied: Admins only", 403));
+        }
+
+        const user = await User.findById(id);
+        if (!user) {
+            return next(new ErrorHandler("User not found", 404));
+        }
+
+        // Update the user's role to admin
+        user.isAdmin = true;
+        await user.save();
+
+        res.status(200).json({ success: true, message: `${user.name} is now an admin` });
+    } catch (error) {
+        console.error(error);
+        return next(new ErrorHandler("Failed to update user role", 500));
+    }
+};
+
+
+export { newUser, login,logout,getMyProfile, changeUserToAdmin};
