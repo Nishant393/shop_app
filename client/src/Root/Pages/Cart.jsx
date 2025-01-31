@@ -1,31 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ShoppingBag, Plus, Minus, Trash2 } from 'lucide-react';
+import axios from 'axios';
+import server from "../../cofig/config"
 
 const Kart = () => {
-  const [cart, setCart] = useState([
-    {
-      productName: "Ghee",
-      stock: 3,
-      price: "200",
-      originalPrice: "250",
-      description: "hello its my first ghee product",
-      category: "fngc",
-      brand: "mooku",
-      qty: 0,
-      productURL: "https://rukminim2.flixcart.com/image/280/280/kkwwu4w0/edible-oil/c/b/s/lite-pouch-sunflower-oil-priya-original-imagy5hsjbqyfhhh.jpeg?q=70"
-    },
-    {
-      productName: "oil",
-      stock: 3,
-      price: "500",
-      originalPrice: "600",
-      description: "hello its my first ghee product",
-      category: "now",
-      brand: "moku",
-      qty: 9,
-      productURL: "https://rukminim2.flixcart.com/image/280/280/kkwwu4w0/edible-oil/c/b/s/lite-pouch-sunflower-oil-priya-original-imagy5hsjbqyfhhh.jpeg?q=70"
-    }
-  ]);
+  const [cart, setCart] = useState([]);
 
   const updateQuantity = (index, change) => {
     setCart(prevCart => {
@@ -61,6 +40,11 @@ const Kart = () => {
   const getFinalTotal = () => {
     return cart.reduce((total, item) => total + (Number(item.price) * item.qty), 0);
   };
+
+
+  useEffect(()=>{
+    // cartHandeler()
+  },[])
 
   if (cart.length === 0) {
     return (
@@ -160,7 +144,7 @@ const Kart = () => {
                 <p className="text-green-600 text-sm">You will save ₹{getTotalDiscount()} on this order</p>
               </div>
               <button className="mt-4 w-full bg-blue-900 text-white py-3 rounded-lg hover:bg-blue-800 font-medium">
-                Proceed to Order
+                Proceed to Order  
               </button>
             </div>
           </div>

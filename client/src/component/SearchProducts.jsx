@@ -11,7 +11,8 @@ const SearchProducts = () => {
   const handleChange = async () => {
     try {
       const response = await axios.get(`http://localhost:3000/product/search?productName=${searchData}`);
-      setProduct(response.data.searchedProduct);
+      setProduct(response.data.products);
+      console.log("option",response.data.products)
     } catch (error) {
       console.log(error);
     }

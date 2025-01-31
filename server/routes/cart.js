@@ -9,7 +9,7 @@ const app = express.Router()
 
 // app.use(isAuthenticated)
 
-app.post("/my/addtocart/",addToCart)
+app.post("/my/addtocart",addToCart)
 app.get("/mycart/:id",getCartDetails)
 app.post("/my/update/:id",updateCartQuantity)
 app.post("/my/removeItem/:id",removeCartItem)
