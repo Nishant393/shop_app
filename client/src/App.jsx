@@ -11,7 +11,6 @@ import Products from "./Root/Pages/Products"
 import Orders from "./Root/Pages/Orders"
 import Root from "./Root/Root"
 import NotFound from "./Root/Pages/NotFound";
-// import AdminRoot from "./Root/Pages/Admin/AdminRoot";
 import { Toaster } from "react-hot-toast";
 import Dashboard from "./Root/Pages/Admin/AdminPages/Dashboard";
 import AddProducts from "./Root/Pages/Admin/AdminPages/AddProducts";
@@ -20,8 +19,7 @@ import ProductItem from "./Root/Pages/ProductItem";
 import ProductManagement from "./Root/Pages/Admin/AdminPages/ProductManagement";
 import Notification from "./Root/Pages/Admin/AdminPages/Notification";
 import Profile from "./Root/Pages/Profile";
-// import { Dashboard } from "@mui/icons-material";
-// import AddProducts from "./Root/Pages/Admin/AdminPages/";
+import EditProduct from "./Root/Pages/Admin/AdminPages/EditProduct";
 
 
 const App = () => {
@@ -35,10 +33,11 @@ const App = () => {
             <Route index element={<Home />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/cart" element={<Cart />} />
-            <Route path="/like" element={<Like />} />
+            <Route path="/likes" element={<Like />} />
             <Route path="/p/:id" element={<ProductItem/>} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/add-product" element={<AddProducts />} />
+            <Route path="/edit-product/:id" element={<EditProduct />} />
             <Route path="/m" element={<ProductManagement />} />
             <Route path="/notification" element={<Notification />} />
             <Route path="/account" element={<Profile />} />

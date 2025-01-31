@@ -49,7 +49,6 @@ function AuthProvider({ children }) {
                             mobileNumber: data?.data.user.mobileNumber,
                         }
                     )
-                    console.log(data.data.user )
                     if (data?.data.user.role == "admin") {
                         setIsAdmin(true)
                     } else { setIsAdmin(false) }
@@ -68,7 +67,6 @@ function AuthProvider({ children }) {
     useEffect(() => {
         getAuthUser()
     }, [])
-    console.log(user)
 
     const values = {
         user,

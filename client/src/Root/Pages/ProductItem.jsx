@@ -4,12 +4,11 @@ import { Heart, ShoppingCart, Check, Star, FenceIcon } from 'lucide-react'
 import axios from 'axios'
 import server from '../../cofig/config'
 import FeedBack from '../../component/FeedBack'
-import Box from '@mui/material/Box';
-import Rating from '@mui/material/Rating';
-import Typography from '@mui/material/Typography';
-
+import { useUserContext } from "../../Provider/AuthContext.jsx"
+import toast from 'react-hot-toast'
 
 const ProductItem = () => {
+
   const [product, setProduct] = useState({
     productName: "",
     stock: 0,
@@ -19,24 +18,60 @@ const ProductItem = () => {
     brand: "",
     productURL: ""
   })
+  const [isCartAdded, setIsCartAdded] = useState(false)
 
   const { id } = useParams()
   const [isLoading, setIsLoading] = useState(true)
+
+  const { user } = useUserContext()
 
   const fetchProductDetails = async () => {
     try {
       const response = await axios.get(`${server}product/getbyid/${id}`)
       setProduct(response.data.result)
-      console.log(response.data.result)
       setIsLoading(false)
     } catch (error) {
       setIsLoading(false)
     }
   }
 
+  const addToCartHandeler = async (quantity = 1) => {
+    try {
+      await axios.post(`${server}cart/my/addtocart`, {
+        user: user.id, product: id, quantity
+      }).then((data) => {
+        toast.success(data?.data.message)
+      })
+    } catch (error) {
+      return error
+    }
+  }
+
+  const likeHandler = async () => {
+    try {
+      console.log("like")
+    } catch (error) {
+      return error
+    }
+  }
+  
+  const getCartById = async () => {
+    try {
+      await axios.get(`${server}cart/mycart/${user.id}`).then((data) => {
+        console.log("data",data?.data.result.find(item => item.product._id === id) !== undefined)
+        setIsCartAdded(data?.data.result.find(item => item.product._id === id) !== undefined)
+
+      })
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     fetchProductDetails()
-  }, [id])
+    getCartById()
+  }, [user])
 
   if (isLoading) {
     return (
@@ -75,9 +110,10 @@ const ProductItem = () => {
                 hover:from-blue-500 hover:to-blue-700 
                 transition-all 
                 group"
+              onClick={() => addToCartHandeler()}
             >
               <ShoppingCart className="mr-2 group-hover:scale-110 transition-transform" />
-              Add to Cart
+              {isCartAdded ? " Go to cart" : "Add to Cart"}
             </button>
 
             <button
@@ -124,7 +160,6 @@ const ProductItem = () => {
               <div >
                 <span className="text-slate-600">Availability:</span>
                 <p className="font-medium flex  items-center">
-                  {console.log(product.stock)}
                   {product.stock !== 0 ?
                     <>
                       <Check className="text-green-500 mr-2" /> In Stock
@@ -148,7 +183,7 @@ const ProductItem = () => {
           </div>
         </div>
       </div>
-      <div className='flex justify-center my-5' >          
+      <div className='flex justify-center my-5' >
         <div className='bg-white w-3/4 p-7 flex justify-center shadow-lg rounded-lg' >
           <FeedBack />
         </div>

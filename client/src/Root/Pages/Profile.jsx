@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { User, Heart, ShoppingCart, Receipt } from 'lucide-react';
 import { useUserContext } from '../../Provider/AuthContext';
+import server from '../../cofig/config';
+import axios from 'axios';
 
 
 const Profile = () => {
@@ -9,12 +11,44 @@ const Profile = () => {
   const [cart, setCart] = useState([]);
   const [orders, setOrders] = useState([]);
   const { user } = useUserContext()
+
   const EmptyState = ({ icon: Icon, message }) => (
     <div className="flex flex-col items-center justify-center p-8 text-gray-500 bg-slate-50 rounded-lg">
       <Icon size={48} className="mb-4 text-blue-600" />
       <p className="text-lg text-slate-900 font-medium">{message}</p>
     </div>
   );
+
+  const getCartDetail = async () => {
+    try {
+      await axios.get(`${server}cart/mycart/${user.id}`).then((data) => {
+        setCart(data?.data.result)
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const getWatchlistDetail = async () => {
+    try {
+      console.log("watchlist")
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const handelRemoveCart = async ()=>{
+    try {
+      // await axios.post(`${server}cart/my/removeItem/:id`)
+      console.log("remove")
+    } catch (error) {
+     console.log(error) 
+    }
+  }
+
+  useEffect(() => {
+    getCartDetail()
+    getWatchlistDetail()
+  }, [user])
 
   return (
     <div className="max-w-3xl mx-auto p-6 space-y-6 bg-gradient-to-b from-slate-50 to-white min-h-screen">
@@ -52,9 +86,9 @@ const Profile = () => {
         </div>
         <div className="mt-4">
           {watchlist.length === 0 ? (
-            <EmptyState 
-              icon={Heart} 
-              message="Your watchlist is empty. Save items you love!" 
+            <EmptyState
+              icon={Heart}
+              message="Your watchlist is empty. Save items you love!"
             />
           ) : (
             watchlist.map(item => (
@@ -63,7 +97,7 @@ const Profile = () => {
                   <img src={item.image} alt={item.name} className="w-16 h-16 mr-4 object-cover rounded" />
                   <div>
                     <p className="font-medium text-slate-900">{item.name}</p>
-                    <p className="text-blue-600 font-semibold">${item.price.toFixed(2)}</p>
+                    <p className="text-blue-600 font-semibold">${item.price}</p>
                   </div>
                 </div>
                 <button className="text-red-500 hover:bg-red-50 p-2 rounded-full transition-colors">
@@ -84,29 +118,30 @@ const Profile = () => {
         </div>
         <div className="mt-4">
           {cart.length === 0 ? (
-            <EmptyState 
-              icon={ShoppingCart} 
-              message="Your cart is empty. Start shopping!" 
+            <EmptyState
+              icon={ShoppingCart}
+              message="Your cart is empty. Start shopping!"
             />
           ) : (
             <>
               {cart.map(item => (
-                <div key={item.id} className="flex items-center justify-between mb-2 p-3 bg-white border border-slate-200 rounded-lg hover:shadow-md transition-shadow">
+                <div key={item._id} className="flex items-center justify-between mb-2 p-3 bg-white border border-slate-200 rounded-lg hover:shadow-md transition-shadow">
+                  {console.log(item.product.productName)}
                   <div className="flex items-center">
-                    <img src={item.image} alt={item.name} className="w-16 h-16 mr-4 object-cover rounded" />
+                    <img src={item.img} alt={item.product.productName} className="w-16 h-16 mr-4 object-cover rounded" />
                     <div>
-                      <p className="font-medium text-slate-900">{item.name}</p>
-                      <p className="text-blue-600 font-semibold">${item.price.toFixed(2)}</p>
+                      <p className="font-medium text-slate-900">{item.product.productName}</p>
+                      <p className="text-blue-600 font-semibold">₹{item.product.price}</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <input 
-                      type="number" 
-                      value={item.quantity} 
-                      className="w-16 text-center border border-slate-300 rounded p-1" 
+                    <input
+                      type="number"
+                      value={item.quantity}
+                      className="w-16 text-center border border-slate-300 rounded p-1"
                       min="1"
                     />
-                    <button className="text-red-500 hover:bg-red-50 p-2 rounded-full transition-colors">
+                    <button onClick={handelRemoveCart} className="text-red-500 hover:bg-red-50 p-2 rounded-full transition-colors">
                       Remove
                     </button>
                   </div>
@@ -114,7 +149,7 @@ const Profile = () => {
               ))}
               <div className="text-right mt-4 p-4 bg-slate-50 rounded-lg">
                 <span className="text-xl font-bold text-slate-900">
-                  Total: ${cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)}
+                  Total: ${cart.reduce((sum, item) => sum + item.price * item.quantity, 0)}
                 </span>
               </div>
             </>
@@ -131,9 +166,9 @@ const Profile = () => {
         </div>
         <div className="mt-4">
           {orders.length === 0 ? (
-            <EmptyState 
-              icon={Receipt} 
-              message="No orders yet. Time to start shopping!" 
+            <EmptyState
+              icon={Receipt}
+              message="No orders yet. Time to start shopping!"
             />
           ) : (
             orders.map(order => (
@@ -149,14 +184,14 @@ const Profile = () => {
                 </div>
                 <div className="mb-2 text-slate-600">
                   <p>Date: {order.date}</p>
-                  <p className="font-semibold text-slate-900">Total: ${order.total.toFixed(2)}</p>
+                  <p className="font-semibold text-slate-900">Total: ${order.total}</p>
                 </div>
                 <div className="bg-slate-50 p-3 rounded-lg">
                   <h3 className="font-semibold text-slate-900 mb-2">Items:</h3>
                   {order.items.map((item, index) => (
                     <div key={index} className="flex justify-between text-slate-700">
                       <span>{item.name}</span>
-                      <span>{item.quantity} x ${item.price.toFixed(2)}</span>
+                      <span>{item.quantity} x ${item.price}</span>
                     </div>
                   ))}
                 </div>

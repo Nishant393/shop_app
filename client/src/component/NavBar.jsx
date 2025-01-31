@@ -13,7 +13,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
 import { useUserContext } from "../Provider/AuthContext"
 import axios from 'axios';
-import { Home, ShoppingCart, Heart, User } from 'lucide-react';
+import { Home, ShoppingCart, Heart, User, Menu } from 'lucide-react';
 import server from '../cofig/config';
 
 const NavBar = () => {
@@ -26,7 +26,6 @@ const NavBar = () => {
 
   const handelLogout = async () => {
     axios.post(`${server}user/logout`,{}, { withCredentials: true }).then((data) => {
-      console.log(data)
       setIsAuthenticated(false)
     }).catch((e) => console.log(e))
   }
@@ -42,7 +41,6 @@ const NavBar = () => {
         await axios
             .get(`${server}user/me`, { withCredentials: true })
             .then((data) => {
-                console.log(data.data.user )
                 // if (data?.data.user.role == "admin") {
                 //     setIsAdmin(false)
                 // } else { setIsAdmin(false) }
@@ -58,10 +56,13 @@ const NavBar = () => {
     }
 }
 
+function getFirstWord(sentence) {
+  const words = sentence.split('');
+  return words.length > 0 ? words[0] : '';
+}
+
   useEffect(() => {
     getAuthUser()
-    console.log("isAuthenticated", isAuthanticated)
-    console.log("user", user)
   }, [handelLogout , isAuthanticated])
 
 
@@ -110,7 +111,7 @@ const NavBar = () => {
               </Link>
               <Link to={"/account"} className=" cursor-pointer flex items-center">
                 <div className="bg-white rounded-full h-10 w-10 flex items-center justify-center">
-                  <span className="text-blue-600 font-bold text-xl">N</span>
+                  <span className="text-blue-600 uppercase font-bold text-xl">{getFirstWord(user.name)}</span>
                 </div>
               </Link>
             </div>
@@ -118,7 +119,7 @@ const NavBar = () => {
             <>
 
               <Button variant="outlined" color="neutral" onClick={toggleDrawer(true)}>
-                Open drawer
+                <Menu/>
               </Button>
               <Drawer
                 open={open}

@@ -1,5 +1,5 @@
 
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Autocomplete, Button, Input, Option, Select, Textarea } from '@mui/joy';
 import { useDropzone } from 'react-dropzone'
 
@@ -7,14 +7,17 @@ import SvgIcon from '@mui/joy/SvgIcon';
 import axios from 'axios';
 import server from '../../../../cofig/config';
 import toast from 'react-hot-toast';
+import { Edit2 } from 'lucide-react';
+import { useParams } from 'react-router-dom';
 
 
-const AddProducts = () => {
+const EditProduct = () => {
 
 
     const [file, setFile] = useState([])
     const [fileUrl, setFileUrl] = useState('')
     const [isLoading, setIsLoading] = useState(false)
+    const {id} = useParams()
     const [product, setProduct] = useState({
         productName: "",
         stock: 0,
@@ -23,6 +26,16 @@ const AddProducts = () => {
         category: "",
         brand: "",
     })
+
+    const getProductData = async()=>{
+        try {
+            const response = await axios.get(`${server}product/getbyid/${id}`)
+            setProduct(response.data)
+            setIsLoading(false)
+          } catch (error) {
+            setIsLoading(false)
+          }
+    }
 
     const handelSubmit = async () => {
         try {
@@ -61,22 +74,19 @@ const AddProducts = () => {
             'image/svg': ['.svg'],
         }
     })
-
-    const top100Films = [
-        { label: 'The Shawshank Redemption', year: 1994 },
-        { label: 'The Godfather', year: 1972 }
-    ]
-
     const handelChange = (e) => {
         const { name, value } = e.target
         setProduct({ ...product, [name]: value })
         console.log(product)
     }
 
+    useEffect(()=>{
+        getProductData()
+    },[])
 
     return (
         <div className=' w-full my-5 lg:w-3/4  mx-auto flex rounded-lg shadow-lg justify-center bg-white  flex-col align-middle'>
-            <h1 className='playwrite-vn-h1 text-slate-900 my-4 mx-auto' >Add Product</h1>
+            <h1 className='playwrite-vn-h1 text-slate-900 flex my-4 mx-auto' ><Edit2/>Edit Product</h1>
             <div className=' w-full mx-auto' >
                 <form className='flex gap-5 px-7 flex-col' >
                     <div>
@@ -218,4 +228,4 @@ const AddProducts = () => {
     )
 }
 
-export default AddProducts;
+export default EditProduct;
