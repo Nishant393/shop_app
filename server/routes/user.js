@@ -12,7 +12,6 @@ const app = express.Router()
 app.post("/newuser", newUser);
 app.post("/login", login);
 
-
 app.use(isAuthenticated)
 
 app.post("/logout", logout);

@@ -31,10 +31,11 @@ const newUser = async (req, res, next) => {
         sendToken(res, user, 201, "User Created"); 
         console.log(user)
         await user.save()
-        // res.status(201).json({
-        //     message: "Signup successful",
-        //     user: { id: user._id, name: user.name, email: user.email, role: user.role },
-        // });
+        res.status(201).json({
+            message: "Signup successful",
+            user
+        }
+    )
     } catch (error) {
         console.error(error);
         return next(new ErrorHandler("Failed to create user", 500));
@@ -49,8 +50,9 @@ const login = async(req,res,next)=>{
     if (!user) {
         return next(new ErrorHandler("Invalid username or password", 404));
     }
-
+    console.log(password)
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log(isMatch)
     if (!isMatch) {
         return next(new ErrorHandler("Invalid username or password", 404));
     }
