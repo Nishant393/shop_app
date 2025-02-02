@@ -10,12 +10,12 @@ import TopProduct from '../../component/TopProduct'
 
 const Home = () => {
 
-  const { isAdmin } = useUserContext()
-  console.log(isAdmin)
+  // const { isAdmin } = useUserContext()
+  // console.log(isAdmin)/
   const navigate = useNavigate()
 
   useEffect(() => {
-    isAdmin ? navigate("/dashboard") : ""
+    // isAdmin ? navigate("/dashboard") : ""
   }, [])
 
   return (

@@ -20,6 +20,7 @@ import ProductManagement from "./Root/Pages/Admin/AdminPages/ProductManagement";
 import Notification from "./Root/Pages/Admin/AdminPages/Notification";
 import Profile from "./Root/Pages/Profile";
 import EditProduct from "./Root/Pages/Admin/AdminPages/EditProduct";
+import AdminRoot from "./Root/Pages/Admin/AdminRoot";
 
 
 const App = () => {
@@ -35,14 +36,17 @@ const App = () => {
             <Route path="/cart" element={<Cart />} />
             <Route path="/likes" element={<Like />} />
             <Route path="/p/:id" element={<ProductItem/>} />
+            <Route path="/account" element={<Profile />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/orders" element={<Orders />} />
+          </Route>
+          <Route element={<AdminRoot/>} >
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/add-product" element={<AddProducts />} />
             <Route path="/edit-product/:id" element={<EditProduct />} />
             <Route path="/m" element={<ProductManagement />} />
             <Route path="/notification" element={<Notification />} />
-            <Route path="/account" element={<Profile />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/orders" element={<Orders />} />
+
           </Route>
           <Route element={<Auth />}>
             <Route element={<SignIn />} path="/sign-in" />
