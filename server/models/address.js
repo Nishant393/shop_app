@@ -38,4 +38,4 @@ const addressSchema = new Schema({
 
   
   
-  export const Address = mongoose.models.address || model("Cart", addressSchema);
+  export const Address = mongoose.models.address || model("Address", addressSchema);

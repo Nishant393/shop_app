@@ -3,7 +3,7 @@ import { ErrorHandler } from "../constant/config.js"
 
 const isAuthenticated =async(req, res, next)=>{
 
-    console.log("tocken form is auth",req.cookies)
+    // console.log("tocken form is auth",req.cookies)
     
     try {
         const token = req.cookies["shop-user-tocken"]
@@ -25,6 +25,7 @@ const isAuthenticated =async(req, res, next)=>{
 
  const isAdmin = (req, res, next) => {
     if (!req.user || !req.user.isAdmin) {
+        console.log(req)
         return res.status(403).json({ success: false, message: "Forbidden: Admin access required" });
     }
     next();

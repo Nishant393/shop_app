@@ -57,8 +57,6 @@ app.get("/", (req, res) => {
 app.use("/user",userRoute);
 app.use("/product",productRoute)
 app.use("/cart",cartRoute)
-// app.use("/cart",cartRoute);
-
 
 app.use(errorMiddleware)
 

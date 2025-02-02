@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
+import { v2 as cloudinary } from "cloudinary";
+import { v4 as uuid } from "uuid";
 
-
+// MongoDB connection function
 const connectDB = (url) => {
     mongoose.connect(url, { dbName: "shopApp" })
         .then((data) => console.log(`Connected to DB: ${data.connection.host}`))
@@ -11,62 +13,87 @@ const connectDB = (url) => {
         });
 };
 
+// Cookie options
 const cookieOption = {
-    maxAge: 15 * 24 * 60 * 60 * 1000,
-    // sameSite: "lax",
-    samesite: "none",
-    // sameSite:"true",
-    httpOnly: true,
-    secure: true,
+    maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
+    sameSite: "none", // Corrected "samesite" to "sameSite"
+    httpOnly: true,   // Prevent JavaScript access to cookies
+    secure: true,     // Ensure cookies are only sent over HTTPS
+};
 
-}
-
-    const sendToken = (res, user, code, message) => {
-        const token = jwt.sign({ _id: user._id },
-            process.env.jwt_Secret,
-        );
-        // console.log(token)
-        // console.log(process.env.jwt_Secret)
-        return res.status(code)
-            .cookie("shop-user-tocken", token, cookieOption)
-            .json({
-                success: true,
-                message,
-                token,
-                // user,
-            });
-    
+// Send JWT token function
+const sendToken = (res, user, code, message) => {
+    if (!user || !user._id) {
+        throw new Error("Invalid user object");
     }
-export const getBase64 = (file)=>
-    `data:${file.mimetype};
-base64,${file.buffer.toString("base64")}`
 
-    const uploadFilesToCloudinary = async (file) => {
-        if (!file) {
-            throw new Error("No files provided for upload.");
-        }
-    
-        try {
-            const uploads = file.map((file) =>
-                cloudinary.uploader.upload(getBase64(file), {
-                    resource_type: "auto",
-                    // Generate unique ID for each file
-                    public_id: uuid(),
-                })
-            );
-    
-            const results = await Promise.all(uploads);
-    
-            console.log("Upload results:", results);
-    
-            return results.map((result) => ({
-                public_id: result.public_id,
-                url: result.secure_url,
-            }));
-        } catch (error) {
-            console.error("Error uploading files to Cloudinary:", error);
-            throw new Error("Error uploading files to Cloudinary");
-        }
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' }); // Fixed env variable key
+    return res.status(code)
+        .cookie("shop-user-token", token, cookieOption)
+        .json({
+            success: true,
+            message,
+            token,
+        });
+};
+
+// Convert file to base64 format
+const getBase64 = (file) => {
+    console.log("base6664545",file[0]);
+    console.log("image mimetype",file[0].mimetype)
+    console.log("file buffer",file[0].buffer)
+    return `data:${file[0].mimetype};base64,${file[0].buffer.toString("base64")}`;
+  };
+// Upload files to Cloudinary
+const uploadFilesToCloudinary = async (files = []) => {
+    console.log("fileArr",files)
+    if (!files || files.length === 0) {
+        throw new Error("No files provided for upload.");
+    }
+
+    try {
+        const uploads = files.map((file) =>
+            cloudinary.uploader.upload(getBase64(file), {
+                resource_type: "auto",
+                // Generate unique ID for each file
+                public_id: uuid(),
+            })
+        );
+
+        const results = await Promise.all(uploads);
+
+        console.log("Upload results:", results);
+
+        return results.map((result) => ({
+            public_id: result.public_id,
+            url: result.secure_url,
+        }));
+    } catch (error) {
+        console.error("Error uploading files to Cloudinary:", error);
+        // throw new Error("Error uploading files to Cloudinary");
+    }
+};
+
+const emitEvent = (req, event, user, data) => {
+    console.log("Emitting event", event);
+};
+
+// Sanitize user data
+const sanitizeUser = (user) => {
+    if (!user || typeof user !== "object") {
+        throw new Error("Invalid user object");
+    }
+    return {
+        _id: user._id,
+        email: user.email,
+        isVerified: user.isVerified,
+        isAdmin: user.isAdmin,
     };
+};
 
-export{connectDB , sendToken,cookieOption,uploadFilesToCloudinary}
+// Generate OTP function
+const generateOTP = () => {
+    return Math.floor(1000 + Math.random() * 9000).toString();
+};
+
+export { connectDB, sendToken, cookieOption, uploadFilesToCloudinary, sanitizeUser, generateOTP };

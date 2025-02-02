@@ -102,34 +102,34 @@ const removeCartItem = async (req, res) => {
 };
 
 // Decrement Quantity or Remove from Cart
-const decrementQuantity = async (req, res) => {
-    try {
-        const { user, product } = req.body;
+// const decrementQuantity = async (req, res) => {
+//     try {
+//         const { user, product } = req.body;
 
-        if (!mongoose.Types.ObjectId.isValid(user) || !mongoose.Types.ObjectId.isValid(product)) {
-            return res.status(400).json({ success: false, message: "Invalid user or product ID" });
-        }
+//         if (!mongoose.Types.ObjectId.isValid(user) || !mongoose.Types.ObjectId.isValid(product)) {
+//             return res.status(400).json({ success: false, message: "Invalid user or product ID" });
+//         }
 
-        const cartItem = await Cart.findOne({ user, product });
+//         const cartItem = await Cart.findOne({ user, product });
 
-        if (!cartItem) {
-            return res.status(404).json({ success: false, message: "Cart item not found" });
-        }
+//         if (!cartItem) {
+//             return res.status(404).json({ success: false, message: "Cart item not found" });
+//         }
 
-        if (cartItem.quantity > 1) {
-            // Reduce quantity by 1
-            cartItem.quantity -= 1;
-            await cartItem.save();
-            res.status(200).json({ success: true, message: "Quantity decremented", cartItem });
-        } else {
-            // Remove item from cart if quantity reaches 0
-            await Cart.deleteOne({ user, product });
-            res.status(200).json({ success: true, message: "Product removed from cart" });
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: "Server Error", error: error.message });
-    }
-};
+//         if (cartItem.quantity > 1) {
+//             // Reduce quantity by 1
+//             cartItem.quantity -= 1;
+//             await cartItem.save();
+//             res.status(200).json({ success: true, message: "Quantity decremented", cartItem });
+//         } else {
+//             // Remove item from cart if quantity reaches 0
+//             await Cart.deleteOne({ user, product });
+//             res.status(200).json({ success: true, message: "Product removed from cart" });
+//         }
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ success: false, message: "Server Error", error: error.message });
+//     }
+// };
 
-export { addToCart, getCartDetails, updateCartQuantity, removeCartItem, decrementQuantity };
+export { addToCart, getCartDetails, updateCartQuantity, removeCartItem,  };
