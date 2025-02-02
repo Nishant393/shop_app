@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom'
 import { useMediaQuery } from 'usehooks-ts'
 import Drawer from '@mui/joy/Drawer';
 import Button from '@mui/joy/Button';
-import LoginIcon from '@mui/icons-material/Login';
 import HomeIcon from '@mui/icons-material/Home';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
@@ -155,7 +154,7 @@ function getFirstWord(sentence) {
                     <Link to={"/order"} className={` cursor-pointer hover:bg-slate-200  text-gray-700 flex gap-3 p-3 ${pathname == "/order" ? "bg-gray-200" : ""} `} > <BookmarkBorderIcon />My order</Link>
                     <Link to={"/contact"} className={` cursor-pointer hover:bg-slate-200  text-gray-700 flex gap-3 p-3 ${pathname == "/contact" ? "bg-gray-200" : ""} `} > <BookmarkBorderIcon />contact</Link>
                   </div>
-                  <button className={` ${isAuthanticated ? "flex" : "hidden"} rounded-xl bg-blue-600 text-white  border-b-slate-800 p-5 mx-7`} >Logout</button>
+                  <button onCanPlayThroughnClick={handelLogout} className={` ${isAuthanticated ? "flex" : "hidden"} rounded-xl bg-blue-600 text-white  border-b-slate-800 p-5 mx-7`} >Logout</button>
                 </ul>
               </Drawer>
             </>

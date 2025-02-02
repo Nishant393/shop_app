@@ -30,7 +30,8 @@ const EditProduct = () => {
     const getProductData = async()=>{
         try {
             const response = await axios.get(`${server}product/getbyid/${id}`)
-            setProduct(response.data)
+            setProduct(response.data.product)
+            console.log(response.data.product)
             setIsLoading(false)
           } catch (error) {
             setIsLoading(false)
@@ -39,8 +40,7 @@ const EditProduct = () => {
 
     const handelSubmit = async () => {
         try {
-            console.log("submit")
-            await axios.post(`${server}product/addnew`, product)
+            await axios.post(`${server}product/update/${id}`, product)
                 .then((e) => {
                     setIsLoading(false)
                     console.log("false")
@@ -126,14 +126,25 @@ const EditProduct = () => {
                                 }}
                             />
                         </div>
-                        <div className='lg:w-1/2' >
-                            <span className='text-slate-600' >Category</span>
-                            <Select name='category' onChange={(e) => setProduct({ ...product, category: e.target.innerHTML })} sx={{ width: "300", height: 50 }}
-                                required placeholder="Choose one…">
-                                <Option value="dog">Dog</Option>
-                                <Option value="cat">Cat</Option>
-                            </Select>
+                        <div className='lg:w-1/2 ' >
+                            <span className='text-slate-600' >quantity</span>
+
+                            <Input
+                                type="text"
+                                fullWidth
+                                required
+                                name='price'
+                                onChange={handelChange}
+                                value={product.price}
+                                sx={{
+                                    "--Input-radius": "11px",
+                                    "--Input-gap": "12px",
+                                    "--Input-minHeight": "52px",
+                                    "--Input-paddingInline": "15px"
+                                }}
+                            />
                         </div>
+                        
                     </div>
                     <div>
                         <span className='text-slate-600' >Brand</span>

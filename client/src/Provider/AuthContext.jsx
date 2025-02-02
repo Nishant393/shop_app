@@ -14,6 +14,7 @@ const INITIAL_STATE = {
     isAuthanticated: false,
     setIsAuthenticated: () => false,
     isAdmin: false,
+    getAuthUser:()=> 0
 }
 
 const AuthContext = createContext(INITIAL_STATE);
@@ -49,7 +50,7 @@ function AuthProvider({ children }) {
                             mobileNumber: data?.data.user.mobileNumber,
                         }
                     )
-                    if (data?.data.user.role == "admin") {
+                    if (data?.data.user.isAdmin) {
                         setIsAdmin(true)
                     } else { setIsAdmin(false) }
                     if (data.data.user.id !== "") {
@@ -72,7 +73,8 @@ function AuthProvider({ children }) {
         user,
         isAdmin,
         isAuthanticated,
-        setIsAuthenticated
+        setIsAuthenticated,
+        getAuthUser
     }
     return (
 
