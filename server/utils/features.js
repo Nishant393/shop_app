@@ -39,14 +39,14 @@ const sendToken = (res, user, code, message) => {
 
 // Convert file to base64 format
 const getBase64 = (file) => {
-    console.log("base6664545",file[0]);
-    console.log("image mimetype",file[0].mimetype)
-    console.log("file buffer",file[0].buffer)
-    return `data:${file[0].mimetype};base64,${file[0].buffer.toString("base64")}`;
-  };
-// Upload files to Cloudinary
-const uploadFilesToCloudinary = async (files = []) => {
-    console.log("fileArr",files)
+    console.log("file for base 64",file)
+    console.log("file mimetype",file.mimetype)
+    console.log("file buffer",file.buffer)
+    return `data:${file.mimetype};base64,${file.buffer.toString("base64")}`;
+};
+
+const uploadFilesToCloudinary = async (files) => {
+    console.log("array of files", files)
     if (!files || files.length === 0) {
         throw new Error("No files provided for upload.");
     }
@@ -55,14 +55,11 @@ const uploadFilesToCloudinary = async (files = []) => {
         const uploads = files.map((file) =>
             cloudinary.uploader.upload(getBase64(file), {
                 resource_type: "auto",
-                // Generate unique ID for each file
                 public_id: uuid(),
             })
         );
 
         const results = await Promise.all(uploads);
-
-        console.log("Upload results:", results);
 
         return results.map((result) => ({
             public_id: result.public_id,
@@ -70,7 +67,7 @@ const uploadFilesToCloudinary = async (files = []) => {
         }));
     } catch (error) {
         console.error("Error uploading files to Cloudinary:", error);
-        // throw new Error("Error uploading files to Cloudinary");
+        throw new Error("Failed to upload files to Cloudinary");
     }
 };
 

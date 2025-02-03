@@ -121,5 +121,9 @@ const changeUserToAdmin = async (req, res, next) => {
     }
 };
 
+const emailOtp = async(req,res)=>{
+    const {email}= req.body;
+}
+
 
 export { newUser, login,logout,getMyProfile, changeUserToAdmin};

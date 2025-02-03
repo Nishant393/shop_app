@@ -17,6 +17,7 @@ const createProduct = async (req, res, next) => {
                     public_id: result.public_id,
                     url: result.url
                 }));
+                console.log(productUrl)
             } catch (error) {
                 return next(new Error("Image upload failed"));
             }
