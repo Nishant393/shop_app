@@ -30,7 +30,8 @@ const isAuthenticated = async (req, res, next) => {
 };
 
 const isAdmin = (req, res, next) => {
-    if (!req.user || !req.user.isAdmin) {
+    if (req.user.isAdmin) {
+        console.log(req.user)
         return next(new ErrorHandler("Forbidden: Admin access required", 403));
     }
     next();
