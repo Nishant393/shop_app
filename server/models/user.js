@@ -1,8 +1,17 @@
 import mongoose, { Schema, model } from "mongoose";
 import { hash, compare } from "bcrypt";
-import crypto from "crypto"; // Use ES6-style import for crypto
+import crypto from "crypto";
 
-const schema = new Schema(
+// Admin Middleware
+export const isAdmin = (req, res, next) => {
+    if (!req.user || !req.user.isAdmin) {
+        return res.status(403).json({ message: "Access denied. Admins only." });
+    }
+    next();
+};
+
+// User Schema
+const userSchema = new Schema(
    {
       name: {
          type: String,
@@ -13,7 +22,7 @@ const schema = new Schema(
          type: String,
          required: true,
          unique: true,
- 
+         match: /^[+]?[0-9]{10,14}$/, // Validate mobile number
       },
       email: {
          type: String,
@@ -33,10 +42,18 @@ const schema = new Schema(
          type: Boolean,
          default: false,
       },
-      isAdmin:{
-         type:Boolean,
-         default:false
-     },
+      isAdmin: {
+         type: Boolean,
+         default: false
+      },
+      resetPasswordToken: {
+         type: String,
+         select: false,
+      },
+      resetPasswordExpires: {
+         type: Date,
+         select: false,
+      }
    },
    {
       timestamps: true,
@@ -44,26 +61,28 @@ const schema = new Schema(
 );
 
 // Middleware to hash the password before saving
-schema.pre("save", async function (next) {
+userSchema.pre("save", async function (next) {
    if (!this.isModified("password")) return next();
    this.password = await hash(this.password, 10);
    next();
 });
 
 // Instance method to compare passwords
-schema.methods.comparePassword = async function (candidatePassword) {
+userSchema.methods.comparePassword = async function (candidatePassword) {
    return await compare(candidatePassword, this.password);
 };
 
-// Static method to generate password reset token
-schema.methods.generatePasswordResetToken = function () {
-   const token = crypto.randomBytes(20).toString("hex");
+// Method to generate password reset token
+userSchema.methods.generatePasswordResetToken = function () {
+   const resetToken = crypto.randomBytes(20).toString("hex");
 
-   this.resetPasswordToken = crypto.createHash("sha256").update(token).digest("hex");
-   this.resetPasswordExpires = Date.now() + 5 * 60 * 1000; 
-   return token;
+   this.resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+   
+   this.resetPasswordExpires = Date.now() + 5 * 60 * 1000; // 5 minutes
+   return resetToken;
 };
 
-
-
-export const User = mongoose.models.User || model("User", schema);
+export const User = mongoose.models.User || model("User", userSchema);

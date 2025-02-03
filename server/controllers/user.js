@@ -50,7 +50,7 @@ const login = async(req,res,next)=>{
     if (!user) {
         return next(new ErrorHandler("Invalid username or password", 404));
     }
-    console.log(password)
+    
     const isMatch = await bcrypt.compare(password, user.password);
     console.log(isMatch)
     if (!isMatch) {
@@ -74,27 +74,59 @@ const logout = async (req, res, next) => {
 };
 
 const getMyProfile = async (req, res, next) => {
-
-   try {
-
-    // const {userId}= req.body;
-    const user = await User.findById(req.user)
-    // .select("-password");
-    if (!user) {
-        return next(new ErrorHandler("User not found", 404));
+    try {
+     const user = await User.findById(req.user).select("-password");
+     
+     if (!user) {
+         return next(new ErrorHandler("User not found", 404));
+     }
+ 
+     res.status(200).json({
+         success: true,
+         message: "User profile fetched successfully",
+         user: {
+             name: user.name,
+             email: user.email,
+             mobileNumber: user.mobileNumber,
+             isVerified: user.isVerified,
+             isAdmin: user.isAdmin
+         }
+     });
+ 
+    } catch (error) {
+     console.error(error);
+     return next(new ErrorHandler("Unable to retrieve user data", 500));
     }
-    res.status(200).json({
-        "success":true,
-        "message":"user profile fetch",
-        "name":user.name,
-        user
-    })
+ };
 
-   } catch (error) {
-    console.log(error)
-    return next(new ErrorHandler("unable to get user data", 404))
-   }
-};
+
+ const getUserById = async (req, res, next) => {
+    try {
+        const {userId}=req.body;
+     const user = await User.findById(userId)
+    //  .select("-password");
+     
+     if (!user) {
+         return next(new ErrorHandler("User not found", 404));
+     }
+ 
+     res.status(200).json({
+         success: true,
+         message: "User profile fetched successfully",
+         user: {
+             name: user.name,
+             email: user.email,
+             mobileNumber: user.mobileNumber,
+             isVerified: user.isVerified,
+             isAdmin: user.isAdmin
+         }
+     });
+ 
+    } catch (error) {
+     console.error(error);
+     return next(new ErrorHandler("Unable to retrieve user data", 500));
+    }
+ };
 
 const changeUserToAdmin = async (req, res, next) => {
     try {
@@ -126,4 +158,4 @@ const emailOtp = async(req,res)=>{
 }
 
 
-export { newUser, login,logout,getMyProfile, changeUserToAdmin};
+export { newUser, login,logout,getMyProfile, changeUserToAdmin,getUserById};
