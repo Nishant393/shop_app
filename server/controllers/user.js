@@ -22,7 +22,7 @@ const newUser = async (req, res, next) => {
             return next(new ErrorHandler("Email already exists", 400));
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+
         const user = await User.create({ name, email, mobileNumber, password });
 
         sendToken(res, user, 201, "User Created");
