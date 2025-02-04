@@ -23,7 +23,7 @@ const newUser = async (req, res, next) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await User.create({ name, email, mobileNumber, password: hashedPassword });
+        const user = await User.create({ name, email, mobileNumber, password });
 
         sendToken(res, user, 201, "User Created");
     } catch (error) {
@@ -35,12 +35,18 @@ const newUser = async (req, res, next) => {
 const login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
+        console.log("email", email, "pass",password)
         const user = await User.findOne({ email }).select("+password");
-
-        if (!user || !(await bcrypt.compare(password, user.password))) {
+console.log("user password",user.password)
+        // if (!user || !(await bcrypt.compare(password, user.password))) {
+        //     return next(new ErrorHandler("Invalid email or password", 401));
+        // }
+        const ismatch = await bcrypt.compare(password, user.password)
+        
+        console.log(ismatch)
+        if (!ismatch) {
             return next(new ErrorHandler("Invalid email or password", 401));
         }
-
         sendToken(res, user, 200, `Welcome back ${user.name}`);
     } catch (error) {
         console.error(error);
