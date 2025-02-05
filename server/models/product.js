@@ -30,6 +30,7 @@ const schema = new Schema(
             public_id: { type: String },
             url: { type: String },
         },
+
         tags: [{ type: String }],
         reviews: [
             {

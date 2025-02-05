@@ -16,9 +16,8 @@ const isAdmin = async (req, res, next) => {
       if (!user.isAdmin) {
          return res.status(403).json({ message: "Access denied. Admins only." });
       }
-
-      req.user = user; // Attach user to request object
-      next(); // Proceed to next middleware or route handler
+      req.user = user; 
+      next(); 
    } catch (error) {
       console.error(error);
       return res.status(500).json({ message: "Internal server error" });

@@ -41,28 +41,30 @@ const sendToken = (res, user, code, message) => {
 
 // Convert file to base64 format
 const getBase64 = (file) => {
-    // console.log("file for base 64",file)
+    console.log("file for base 64",file)
     console.log("file mimetype",file.mimetype)
     console.log("file buffer",file.buffer)
     return `data:${file.mimetype};base64,${file.buffer.toString("base64")}`;
 };
 
 const uploadFilesToCloudinary = async (files) => {
-    // console.log("array of files", files)
     if (!files || files.length === 0) {
         throw new Error("No files provided for upload.");
     }
 
     try {
+        // Map the files for upload (base64 encoding)
         const uploads = files.map((file) =>
             cloudinary.uploader.upload(getBase64(file), {
-                resource_type: "auto",
-                public_id: uuid(),
+                resource_type: "auto",  // Auto-detect resource type (image/video)
+                public_id: uuid(),  // Unique identifier for the uploaded file
             })
         );
 
+        // Wait for all uploads to finish
         const results = await Promise.all(uploads);
 
+        // Return an array of objects with public_id and URL for each file uploaded
         return results.map((result) => ({
             public_id: result.public_id,
             url: result.secure_url,
@@ -73,9 +75,8 @@ const uploadFilesToCloudinary = async (files) => {
     }
 };
 
-const emitEvent = (req, event, user, data) => {
-    console.log("Emitting event", event);
-};
+
+
 
 // Sanitize user data
 const sanitizeUser = (user) => {

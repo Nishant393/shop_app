@@ -8,21 +8,27 @@ const createProduct = async (req, res, next) => {
         const { productName, quantity, stock, price, description, category, brand } = req.body;
         const files = req.files;
 
-        let productUrl = [];
+        let productUrl;
 
-        if (files && Array.isArray(files)) {
-            try {
-                const results = await uploadFilesToCloudinary(files);
-                productUrl = results.map(result => ({
-                    public_id: result.public_id,
-                    url: result.url
-                }));
-                console.log(productUrl)
-            } catch (error) {
-                return next(new Error("Image upload failed"));
-            }
+        // Ensure files are provided
+        if (!files || files.length === 0) {
+            return next(new Error("No files provided for upload"));
         }
 
+        try {
+            console.log("Trying to upload image");
+            const result = await uploadFilesToCloudinary(files);  // Upload the image(s)
+            console.log("Result of Cloudinary upload:", result);
+
+            // If there are multiple files, we can map them, else we use the first one.
+            productUrl = result[0];
+
+            console.log("productUrl object:", productUrl);
+        } catch (error) {
+            return next(new Error("Image upload failed: " + error.message));
+        }
+
+        // Create the product
         const createdProduct = await Products.create({
             productName,
             stock,
@@ -31,14 +37,16 @@ const createProduct = async (req, res, next) => {
             description,
             category,
             brand,
-            productUrl
+            productUrl,  // Save the image URL(s) in the DB
         });
+        
 
         return res.status(201).json({
             success: true,
             message: "Product added successfully",
             product: createdProduct
         });
+
     } catch (error) {
         next(error);
     }
