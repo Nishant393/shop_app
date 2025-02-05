@@ -41,14 +41,14 @@ const sendToken = (res, user, code, message) => {
 
 // Convert file to base64 format
 const getBase64 = (file) => {
-    console.log("file for base 64",file)
+    // console.log("file for base 64",file)
     console.log("file mimetype",file.mimetype)
     console.log("file buffer",file.buffer)
     return `data:${file.mimetype};base64,${file.buffer.toString("base64")}`;
 };
 
 const uploadFilesToCloudinary = async (files) => {
-    console.log("array of files", files)
+    // console.log("array of files", files)
     if (!files || files.length === 0) {
         throw new Error("No files provided for upload.");
     }

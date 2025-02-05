@@ -43,7 +43,7 @@ console.log("user password",user.password)
         // }
         const ismatch = await bcrypt.compare(password, user.password)
         
-        console.log(ismatch)
+        console.log("passwordm match",ismatch)
         if (!ismatch) {
             return next(new ErrorHandler("Invalid email or password", 401));
         }
@@ -54,10 +54,17 @@ console.log("user password",user.password)
     }
 };
 
-const logout = async (req, res, next) => {
-    res.clearCookie("shop-user-token", cookieOption);
-    res.status(200).json({ success: true, message: "Logout successful" });
-};
+const logout = (async (req, res, next) => {
+try {
+    res.status(200)
+        .cookie("shop-user-token", "", { ...cookieOption, maxAge: 0 })
+        .json({ success: true, message: "Logout successful" });
+    
+} catch (error) {
+    console.log(error)
+}
+    
+});
 
 const getMyProfile = async (req, res, next) => {
     try {
