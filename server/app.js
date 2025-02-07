@@ -15,7 +15,6 @@ import { Console } from "console";
 
 try {
     dotenv.config({ path: "./.env" });
-    console.log(process.env.EMAIL_USER)
 } catch (error) {
     console.error("Failed to load environment variables:", error);
     process.exit(1); // Exit process if .env fails
@@ -52,6 +51,12 @@ try {
     process.exit(1); // Exit process if Cloudinary config fails
 }
 
+try {
+    
+    
+} catch (error) {
+    
+}
 
 app.get("/", (req, res) => {
     res.json("hello to shop backend");
