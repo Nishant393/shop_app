@@ -37,14 +37,10 @@ const login = async (req, res, next) => {
         const { email, password } = req.body;
         console.log("email", email, "pass",password)
         const user = await User.findOne({ email }).select("+password");
-console.log("user password",user.password)
-        // if (!user || !(await bcrypt.compare(password, user.password))) {
-        //     return next(new ErrorHandler("Invalid email or password", 401));
-        // }
-        const ismatch = await bcrypt.compare(password, user.password)
+        console.log(user.password,password)
+        console.log(!user, await bcrypt.compare(password , user.password))
         
-        console.log("passwordm match",ismatch)
-        if (!ismatch) {
+        if (!user || !(await bcrypt.compare(password, user.password))) {
             return next(new ErrorHandler("Invalid email or password", 401));
         }
         sendToken(res, user, 200, `Welcome back ${user.name}`);

@@ -5,7 +5,6 @@ import { useUserContext } from '../Provider/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import AdminNavigation from '../component/AdminNavigation'
 import Footer from '../component/Footer'
-// import Dashboard from './Pages/Admin/Dashboard'
 
 const Root = () => {
 
@@ -15,7 +14,10 @@ const Root = () => {
   useEffect(()=>{
     getAuthUser()
     console.log("admin",isAdmin)
-    if(isAdmin) naviagate("/dashboard")
+    if(isAdmin) 
+      {
+        naviagate("/dashboard")
+      }
   },[isAdmin,isAuthanticated])
   return (
     <div className='w-screen' >

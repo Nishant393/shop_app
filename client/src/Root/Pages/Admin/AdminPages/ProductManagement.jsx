@@ -1,8 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Edit, Plus, Minus, Delete, DeleteIcon, LucideDelete, Trash2 } from 'lucide-react';
+import { Edit, Plus, Minus, Trash2,  Search } from 'lucide-react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import server from '../../../../cofig/config';
+import { Link } from 'react-router-dom';
+import { Button } from '@mui/joy';
 
 const ProductManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -58,7 +60,7 @@ const ProductManagement = () => {
 
   return (
     <div className="p-4 min-h-screen max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Product Search</h1>
+      <h1 className="text-2xl font-bold mb-4 flex gap-4 text-stone-700 "> <Search/> Search Product </h1>
 
       <input
         type="text"
@@ -67,8 +69,21 @@ const ProductManagement = () => {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-
-      <div className="overflow-x-auto">
+{
+  filteredProducts.length == 0 ?
+  (
+    <div className='w-full flex gap-5 my-4 flex-col ' >
+      <h1 className=' m-auto text-black' >
+       there is No product yet
+      </h1>
+      <h2 className='m-auto text-2xl' >
+      Add Product !</h2>
+      <Link to="/add-product" className=' m-auto' ><Button>add product</Button></Link>
+    </div>
+  )
+  :
+  (
+    <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-gray-100">
@@ -81,7 +96,7 @@ const ProductManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredProducts.map((product) => (
+            {filteredProducts.map((product) =>{ (
               <tr key={product._id} className="hover:bg-gray-50">
                 <td className="border p-2">{product.productName}</td>
                 <td className="border p-2">{product.brand}</td>
@@ -119,10 +134,13 @@ const ProductManagement = () => {
                 </td>
                 <td className="border p-2" >{product.qty}</td>
               </tr>
-            ))}
+            )})}
           </tbody>
         </table>
       </div>
+  )
+}
+      
     </div>
   );
 };

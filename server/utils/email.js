@@ -25,6 +25,7 @@ const sendMail = async (receiverEmail, subject, body) => {
       subject: subject,
       html: body,
     });
+    console.log("auth val",res)
     console.log("Email sent successfully");
   } catch (error) {
     console.error("Error sending email:", error);

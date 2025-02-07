@@ -6,9 +6,11 @@ import axios from 'axios';
 import server from '../cofig/config';
 
 const AdminNavigation = () => {
+
     const { pathname } = useLocation()
     const navigate = useNavigate()
     const { user,isAuthanticated,setIsAuthenticated , getAuthUser } = useUserContext()
+
     const handelLogout = async () => {
         await axios.post(`${server}user/logout`,{}, { withCredentials: true }).then((data) => {
           setIsAuthenticated(false)
@@ -16,6 +18,7 @@ const AdminNavigation = () => {
             getAuthUser()
         }).catch((e) => console.log(e))
       }
+
     return (
         <div className="w-64 bg-white  min-h-screen flex justify-between flex-col  shadow-lg">
             <nav className=" flex justify-between  h-screen flex-col gap-2">
@@ -31,34 +34,34 @@ const AdminNavigation = () => {
                         </div>
                     </div>
                     <Link to={"/dashboard"}
-                        className={`flex items-center w-full p-3 hover:bg-gray-100 ${pathname === '/dashboard' ? 'bg-gray-100' : ''}`}
+                        className={`flex items-center w-full p-3 hover:bg-gray-100 ${pathname === '/dashboard' ? 'bg-gray-100 border border-slate-500 rounded-s-xl border-r-0' : ''}`}
                     >
                         <LayoutDashboard className="mr-2" size={20} />
                         Dashboard
                     </Link>
                     <Link to={"/add-product"}
-                        className={`flex items-center w-full p-3 hover:bg-gray-100 ${pathname === '/add-product' ? 'bg-gray-100' : ''
+                        className={`flex items-center w-full p-3 hover:bg-gray-100 ${pathname === '/add-product' ? 'bg-gray-100 border border-slate-500 rounded-s-xl border-r-0 ' : ''
                             }`}
                     >
                         <Plus className="mr-2" size={20} />
                         Add Product
                     </Link>
                     <Link to={"add-carousel"}
-                        className={`flex items-center w-full p-3 hover:bg-gray-100 ${pathname === 'add-carousel' ? 'bg-gray-100' : ''
+                        className={`flex items-center w-full p-3 hover:bg-gray-100 ${pathname === '/add-carousel' ? 'bg-gray-100 border border-slate-500 rounded-s-xl border-r-0' : ''
                             }`}
                     >
                         <Image className="mr-2" size={20} />
                         Add Carousel
                     </Link>
                     <Link to={"send-email"}
-                        className={`flex items-center w-full p-3 hover:bg-gray-100 ${pathname === 'send-email' ? 'bg-gray-100' : ''
+                        className={`flex items-center w-full p-3 hover:bg-gray-100 ${pathname === '/send-email' ? 'bg-gray-100 border border-slate-500 rounded-s-xl border-r-0' : ''
                             }`}
                     >
                         <Mail className="mr-2" size={20} />
                         Send Notification
                     </Link>
                     <Link to={"product-management"}
-                        className={`flex items-center w-full p-3 hover:bg-gray-100 ${pathname === 'product-management' ? 'bg-gray-100' : ''
+                        className={`flex items-center w-full p-3 hover:bg-gray-100 ${pathname === '/product-management' ? 'bg-gray-100 border border-slate-500 rounded-s-xl border-r-0' : ''
                             }`}
                     >
                         <ShoppingBag className="mr-2" size={20} />

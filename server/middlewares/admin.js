@@ -4,7 +4,7 @@ import { User } from "../models/user.js";
 const isAdmin = async (req, res, next) => {
    try {
       const token = req.cookies["shop-user-token"];
-    //   console.log("tocken wile admin",token)
+      console.log("tocken wile admin",req.cookies["shop-user-token"])
       if (!token) {
          return res.status(401).json({ message: "Unauthorized. No token provided." });
       }

@@ -1,53 +1,91 @@
 
 import React, { useCallback, useState } from 'react'
-import { Autocomplete, Button, Input, Option, Select, Textarea } from '@mui/joy';
+import { Button, Divider, Input, Option, Select, Textarea } from '@mui/joy';
 import { useDropzone } from 'react-dropzone'
-
 import SvgIcon from '@mui/joy/SvgIcon';
 import axios from 'axios';
 import server from '../../../../cofig/config';
 import toast from 'react-hot-toast';
+import { AddBox } from '@mui/icons-material';
 
 
-const AddProducts = () => {
+export const AddProducts = () => {
 
 
-    const [file, setFile] = useState([])
+    const [file, setFile] = useState(File[0])
+    const [currency, setCurrency] = useState('kg');
+    const [qty, setQty] = useState(0);
     const [fileUrl, setFileUrl] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [product, setProduct] = useState({
         productName: "",
         stock: 0,
+        quantity: "",
         price: "0",
         description: "",
         category: "",
         brand: "",
     })
 
-    const handelSubmit = async () => {
+    const handelSubmit = async (e) => {
+        e.preventDefault();
         try {
-            console.log("submit")
-            await axios.post(`${server}product/addnew`, product)
+            console.log("submit", file[0]);
+            await axios.post(`${server}product/addnew`,
+                {
+                    productName: product.productName,
+                    stock: product.stock,
+                    quantity: product.quantity,
+                    price: product.price,
+                    description: product.description,
+                    category: product.category,
+                    brand: product.brand,
+                    // productImage:
+                    productImage: file[0]
+                }, {
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
                 .then((e) => {
-                    setIsLoading(false)
-                    console.log("false")
-                    console.log(e.data.success)
-                    console.log(e.data.message)
+                    setIsLoading(false);
+                    console.log("false");
+                    if (e.data.success) {
+                        setProduct({
+                            productName: "",
+                            stock: "",
+                            quantity: "",
+                            price: 0,
+                            description: "",
+                            category: "",
+                            brand: "",
+                        })
+                        setFile([])
+                        setFileUrl("")
+                    }
+                    console.log(e.data.message);
                     toast.success(e.data.message);
                 }).catch((e) => {
                     setIsLoading(false)
-                    toast.error(e.response.data.error.message);
-                    console.log(e.response.data.error.message)
+                    console.log(e)
                     console.log(e.response.data.success)
+                    toast.error(e.response.data.error.message);
                 })
         } catch (error) {
             console.log(error)
         }
     }
+
+    const qtyChange = (e) => {
+        setProduct({ ...product, quantity: `${e.target.value}${currency}` })
+        console.log(product)
+    }
+
     const onDrop = useCallback((acceptedFiles) => {
-        if (!isDragReject) console.log("something went wrong !!")
+        if (isDragReject) toast.error("something went wrong !!")
         console.log(acceptedFiles, URL.createObjectURL(acceptedFiles[0]))
-        console.log("file", acceptedFiles)
+        console.log("file", acceptedFiles[0])
         setFile(acceptedFiles)
         setFileUrl(URL.createObjectURL(acceptedFiles[0]))
     }, [])
@@ -62,10 +100,7 @@ const AddProducts = () => {
         }
     })
 
-    const top100Films = [
-        { label: 'The Shawshank Redemption', year: 1994 },
-        { label: 'The Godfather', year: 1972 }
-    ]
+
 
     const handelChange = (e) => {
         const { name, value } = e.target
@@ -76,9 +111,12 @@ const AddProducts = () => {
 
     return (
         <div className=' w-full my-5 lg:w-3/4  mx-auto flex rounded-lg shadow-lg justify-center bg-white  flex-col align-middle'>
-            <h1 className='playwrite-vn-h1 text-slate-900 my-4 mx-auto' >Add Product</h1>
+            <h1 className='playwrite-vn-h1 text-slate-900 my-4 mx-auto' > <AddBox /> Add Product</h1>
             <div className=' w-full mx-auto' >
-                <form className='flex gap-5 px-7 flex-col' >
+                <form target="_self"
+                    onSubmit={handelSubmit}
+                    method='get'
+                    className='flex gap-5 px-7 flex-col' >
                     <div>
                         <span className='text-slate-600' >Product Name</span>
                         <Input
@@ -125,22 +163,70 @@ const AddProducts = () => {
                             </Select>
                         </div>
                     </div>
-                    <div>
-                        <span className='text-slate-600' >Brand</span>
-                        <Input
-                            fullWidth
-                            placeholder="Product Name"
-                            required
-                            name='brand'
-                            value={product.brand}
-                            onChange={handelChange}
-                            sx={{
-                                "--Input-radius": "11px",
-                                "--Input-gap": "12px",
-                                "--Input-minHeight": "52px",
-                                "--Input-paddingInline": "15px"
-                            }}
-                        />
+                    <div className='flex flex-col lg:flex-row  w-full gap-9' >
+                        <div className='lg:w-1/2 ' >
+                            <span className='text-slate-600' >Brand</span>
+                            <Input
+                                fullWidth
+                                placeholder="Product Name"
+                                required
+                                name='brand'
+                                value={product.brand}
+                                onChange={handelChange}
+                                sx={{
+                                    "--Input-radius": "11px",
+                                    "--Input-gap": "12px",
+                                    "--Input-minHeight": "52px",
+                                    "--Input-paddingInline": "15px"
+                                }}
+                            />
+                        </div>
+                        <div className='lg:w-1/2' >
+                            <span className='text-slate-600' >quantity</span>
+
+                            <Input
+                                fullWidth
+                                placeholder="qty"
+                                required
+                                name='quantity'
+                                value={qty}
+                                onChange={(e) => {
+                                    setQty(e.target.value)
+                                    qtyChange(e)
+                                }}
+                                sx={{
+                                    "--Input-radius": "11px",
+                                    "--Input-gap": "12px",
+                                    "--Input-minHeight": "52px",
+                                    "--Input-paddingInline": "15px",
+                                    width: "300",
+                                    height: 50
+                                }}
+                                endDecorator={{ kg: 'kg', L: 'L', g: 'g' }[currency]}
+
+                                startDecorator={
+                                    <React.Fragment>
+                                        <Select
+                                            variant="plain"
+                                            value={currency}
+                                            defaultValue={"kilo"}
+                                            onChange={(_, value) => setCurrency(value)}
+                                            slotProps={{
+                                                listbox: {
+                                                    variant: 'outlined',
+                                                },
+                                            }}
+                                            sx={{ ml: -1.5, '&:hover': { bgcolor: 'transparent' } }}
+                                        >
+                                            <Option value="kg">kg</Option>
+                                            <Option value="L">L</Option>
+                                            <Option value="g">gram</Option>
+                                        </Select>
+                                        <Divider orientation="vertical" />
+                                    </React.Fragment>
+                                }
+                            />
+                        </div>
                     </div>
                     <div>
                         <span className='text-slate-600' >Description</span>
@@ -211,7 +297,7 @@ const AddProducts = () => {
                         </div>
                         <span className='text-zinc-700 mx-auto' >Drop & Down </span>
                     </div>
-                    <Button  onClick={handelSubmit} type='submit' sx={{ padding: "6px", margin: "30px" }} loading={isLoading} > Submit </Button>
+                    <Button type='submit' sx={{ padding: "6px", margin: "30px" }} loading={isLoading} > Submit </Button>
                 </form>
             </div>
         </div>

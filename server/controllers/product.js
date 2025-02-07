@@ -7,7 +7,6 @@ const createProduct = async (req, res, next) => {
     try {
         const { productName, quantity, stock, price, description, category, brand } = req.body;
         const files = req.files;
-
         let productUrl;
 
         // Ensure files are provided
