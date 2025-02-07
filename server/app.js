@@ -7,12 +7,15 @@ import { createServer } from 'http';
 import { errorMiddleware } from "./middlewares/error.js";
 import cartRoute from "./routes/cart.js";
 import productRoute from "./routes/product.js";
+import emailRoute from "./routes/email.js";
 import userRoute from "./routes/user.js";
 import { corsOption } from "./utils/constant.js";
 import { connectDB } from "./utils/features.js";
+import { Console } from "console";
 
 try {
     dotenv.config({ path: "./.env" });
+    console.log(process.env.EMAIL_USER)
 } catch (error) {
     console.error("Failed to load environment variables:", error);
     process.exit(1); // Exit process if .env fails
@@ -56,6 +59,7 @@ app.get("/", (req, res) => {
 
 app.use("/user",userRoute);
 app.use("/product",productRoute)
+app.use("/email",emailRoute)
 app.use("/cart",cartRoute)
 
 app.use(errorMiddleware)

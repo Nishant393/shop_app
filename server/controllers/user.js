@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
 import { User } from "../models/user.js";
-import { ErrorHandler } from "../constant/config.js";
 import { cookieOption, sendToken } from "../utils/features.js";
 import joi from "joi";
+import { ErrorHandler } from "../utils/utility.js";
 
 const userValidationSchema = joi.object({
     name: joi.string().min(3).max(50).required(),
@@ -108,5 +108,8 @@ const changeUserToAdmin = async (req, res, next) => {
         return next(new ErrorHandler("Failed to update user role", 500));
     }
 };
+
+
+
 
 export { newUser, login, logout, getMyProfile, getUserById, changeUserToAdmin };

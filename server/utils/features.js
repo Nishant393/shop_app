@@ -69,6 +69,7 @@ const uploadFilesToCloudinary = async (files) => {
             public_id: result.public_id,
             url: result.secure_url,
         }));
+        
     } catch (error) {
         console.error("Error uploading files to Cloudinary:", error);
         throw new Error("Failed to upload files to Cloudinary");

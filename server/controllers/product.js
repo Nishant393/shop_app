@@ -74,7 +74,7 @@ const searchProduct = async (req, res, next) => {
 // Get product by ID
 const getProductById = async (req, res, next) => {
     try {
-        const { id } = req.body;
+        const { id } = req.params;
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ success: false, message: "Invalid product ID" });
         }
