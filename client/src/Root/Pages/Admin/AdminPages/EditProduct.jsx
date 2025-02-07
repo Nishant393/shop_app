@@ -1,6 +1,6 @@
 
-import React, { useCallback, useEffect, useState } from 'react'
-import { Autocomplete, Button, Input, Option, Select, Textarea } from '@mui/joy';
+import React, { Fragment, useCallback, useEffect, useState } from 'react'
+import { Autocomplete, Button, Divider, Input, Option, Select, Textarea } from '@mui/joy';
 import { useDropzone } from 'react-dropzone'
 
 import SvgIcon from '@mui/joy/SvgIcon';
@@ -13,14 +13,14 @@ import { useParams } from 'react-router-dom';
 
 const EditProduct = () => {
 
-
-    const [file, setFile] = useState([])
-    const [fileUrl, setFileUrl] = useState('')
+    const [currency, setCurrency] = useState('kg');
+    const [qty, setQty] = useState(0);
+    const { id } =useParams()
     const [isLoading, setIsLoading] = useState(false)
-    const {id} = useParams()
     const [product, setProduct] = useState({
         productName: "",
         stock: 0,
+        quantity: "",
         price: "0",
         description: "",
         category: "",
@@ -39,11 +39,11 @@ const EditProduct = () => {
     }
 
     const handelSubmit = async () => {
+        e.preventDefault();
         try {
-            await axios.post(`${server}product/update/${id}`, product)
+            await axios.put(`${server}product/update/${id}`, product)
                 .then((e) => {
                     setIsLoading(false)
-                    console.log("false")
                     console.log(e.data.success)
                     console.log(e.data.message)
                     toast.success(e.data.message);
@@ -57,28 +57,17 @@ const EditProduct = () => {
             console.log(error)
         }
     }
-    const onDrop = useCallback((acceptedFiles) => {
-        if (!isDragReject) console.log("something went wrong !!")
-        console.log(acceptedFiles, URL.createObjectURL(acceptedFiles[0]))
-        console.log("file", acceptedFiles)
-        setFile(acceptedFiles)
-        setFileUrl(URL.createObjectURL(acceptedFiles[0]))
-    }, [])
 
-    const { getRootProps, getInputProps, isDragReject } = useDropzone({
-        onDrop,
-        accept: {
-            'image/png': ['.png'],
-            'image/jpg': ['.jpg'],
-            'image/jpeg': ['.jpeg'],
-            'image/svg': ['.svg'],
-        }
-    })
     const handelChange = (e) => {
         const { name, value } = e.target
         setProduct({ ...product, [name]: value })
         console.log(product)
     }
+    const qtyChange = (e) => {
+        setProduct({ ...product, quantity: `${e.target.value}${currency}` })
+        console.log(product)
+    }
+
 
     useEffect(()=>{
         getProductData()
@@ -88,7 +77,10 @@ const EditProduct = () => {
         <div className=' w-full my-5 lg:w-3/4  mx-auto flex rounded-lg shadow-lg justify-center bg-white  flex-col align-middle'>
             <h1 className='playwrite-vn-h1 text-slate-900 flex my-4 mx-auto' ><Edit2/>Edit Product</h1>
             <div className=' w-full mx-auto' >
-                <form className='flex gap-5 px-7 flex-col' >
+            <form target="_self"
+                    onSubmit={handelSubmit}
+                    method='get'
+                    className='flex gap-5 px-7 flex-col' >
                     <div>
                         <span className='text-slate-600' >Product Name</span>
                         <Input
@@ -126,16 +118,25 @@ const EditProduct = () => {
                                 }}
                             />
                         </div>
+                        <div className='lg:w-1/2' >
+                            <span className='text-slate-600' >Category</span>
+                            <Select name='category' onChange={(e) => setProduct({ ...product, category: e.target.innerHTML })} sx={{ width: "300", height: 50 }}
+                                required placeholder="Choose one…">
+                                <Option value="dog">Dog</Option>
+                                <Option value="cat">Cat</Option>
+                            </Select>
+                        </div>
+                    </div>
+                    <div className='flex flex-col lg:flex-row  w-full gap-9' >
                         <div className='lg:w-1/2 ' >
-                            <span className='text-slate-600' >quantity</span>
-
+                            <span className='text-slate-600' >Brand</span>
                             <Input
-                                type="text"
                                 fullWidth
+                                placeholder="Product Name"
                                 required
-                                name='price'
+                                name='brand'
+                                value={product.brand}
                                 onChange={handelChange}
-                                value={product.price}
                                 sx={{
                                     "--Input-radius": "11px",
                                     "--Input-gap": "12px",
@@ -144,24 +145,52 @@ const EditProduct = () => {
                                 }}
                             />
                         </div>
-                        
-                    </div>
-                    <div>
-                        <span className='text-slate-600' >Brand</span>
-                        <Input
-                            fullWidth
-                            placeholder="Product Name"
-                            required
-                            name='brand'
-                            value={product.brand}
-                            onChange={handelChange}
-                            sx={{
-                                "--Input-radius": "11px",
-                                "--Input-gap": "12px",
-                                "--Input-minHeight": "52px",
-                                "--Input-paddingInline": "15px"
-                            }}
-                        />
+                        <div className='lg:w-1/2' >
+                            <span className='text-slate-600' >quantity</span>
+
+                            <Input
+                                fullWidth
+                                placeholder="qty"
+                                required
+                                name='quantity'
+                                value={qty}
+                                onChange={(e) => {
+                                    setQty(e.target.value)
+                                    qtyChange(e)
+                                }}
+                                sx={{
+                                    "--Input-radius": "11px",
+                                    "--Input-gap": "12px",
+                                    "--Input-minHeight": "52px",
+                                    "--Input-paddingInline": "15px",
+                                    width: "300",
+                                    height: 50
+                                }}
+                                endDecorator={{ kg: 'kg', L: 'L', g: 'g' }[currency]}
+
+                                startDecorator={
+                                    <Fragment>
+                                        <Select
+                                            variant="plain"
+                                            value={currency}
+                                            defaultValue={"kilo"}
+                                            onChange={(_, value) => setCurrency(value)}
+                                            slotProps={{
+                                                listbox: {
+                                                    variant: 'outlined',
+                                                },
+                                            }}
+                                            sx={{ ml: -1.5, '&:hover': { bgcolor: 'transparent' } }}
+                                        >
+                                            <Option value="kg">kg</Option>
+                                            <Option value="L">L</Option>
+                                            <Option value="g">gram</Option>
+                                        </Select>
+                                        <Divider orientation="vertical" />
+                                    </Fragment>
+                                }
+                            />
+                        </div>
                     </div>
                     <div>
                         <span className='text-slate-600' >Description</span>
@@ -182,57 +211,7 @@ const EditProduct = () => {
                             }}
                         />
                     </div>
-                    <div className=' p-5 flex flex-col gap-5 bg-zinc-100 rounded-xl shadow-md border-slate-600 border-2 mx-auto w-3/4' >
-
-                        <div {...getRootProps()} className=' flex flex-center rounded-3xl cursor-pointe' >
-                            <input {...getInputProps()} className=' cursor-pointer' />
-                            {
-                                fileUrl ? (
-                                    <div className=' flex flex-col w-full p-5 lg:p-10'>
-                                        <img
-                                            src={fileUrl}
-                                            alt='uplode img'
-                                            className='file_uploder-img'
-                                        />
-                                    </div>
-                                ) : (
-                                    <div className='flex flex-col gap-5' >
-                                        <h2 className='mx-auto' >Add Product Image</h2>
-                                        <p className=' text-light-4' >svg, png , jpg</p>
-                                        <Button
-                                            sx={{ padding: "10px", width: "75%", margin: "auto" }}
-                                            component="label"
-                                            role={undefined}
-                                            tabIndex={-1}
-                                            variant="outlined"
-                                            color="neutral"
-                                            startDecorator={
-                                                <SvgIcon>
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        strokeWidth={1.5}
-                                                        stroke="currentColor"
-                                                    >
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
-                                                        />
-                                                    </svg>
-                                                </SvgIcon>
-                                            }
-                                        >
-                                            select from computer
-                                        </Button>
-                                    </div>
-                                )
-                            }
-                        </div>
-                        <span className='text-zinc-700 mx-auto' >Drop & Down </span>
-                    </div>
-                    <Button  onClick={handelSubmit} type='submit' sx={{ padding: "6px", margin: "30px" }} loading={isLoading} > Submit </Button>
+                    <Button type='submit' sx={{ padding: "6px", margin: "30px" }} loading={isLoading} > Submit </Button>
                 </form>
             </div>
         </div>

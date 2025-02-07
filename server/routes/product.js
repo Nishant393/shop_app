@@ -16,9 +16,9 @@ app.get("/getbyid/:id",getProductById)
 
 app.use(isAdmin)
 // app.get("/admingetbyid/:id",getProductById) 
-app.get("/allproductsforadmin", getAllProducts)
 
 app.post("/addnew",productImageMiddleware,createProduct)
+app.get("/allproductsforadmin", getAllProducts)
 app.put("/update/:id",updateById)
 app.post("/delete/:id",deleteById)
 
