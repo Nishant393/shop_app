@@ -1,31 +1,29 @@
-import nodemailer from "nodemailer"
-
-
-const emailuser =process.env.EMAIL_USER
-const emailAppPassword = process.env.EMAIL_PASS
-
+import nodemailer from "nodemailer";
 
 const sendMail = async (receiverEmail, subject, body) => {
   try {
-    console.log("auth value", transporter.auth)
-    await nodemailer.createTransport(
-      {
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false, 
+    const transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT, 
+      secure: true, 
       auth: {
-        user: emailuser,
-        pass: emailAppPassword,
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
-    }
-    ).sendMail({
+    });
+    transporter.verify((err, success) => {
+      if (err) console.error(err);
+      console.log('Your config is correct');
+  });
+
+    const response = await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: receiverEmail,
       subject: subject,
       html: body,
     });
-    console.log("auth val",res)
-    console.log("Email sent successfully");
+
+    console.log("Email sent successfully:", response.messageId);
   } catch (error) {
     console.error("Error sending email:", error);
   }

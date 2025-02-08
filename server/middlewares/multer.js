@@ -9,10 +9,11 @@ const multerUpload = multer({
 })
 
 const productImageMiddleware = multerUpload.array("productImage",5)
-
+const emailAttachmentMiddleware = multerUpload.array("attachments")
 
 
 export {
     multerUpload,
     productImageMiddleware,
+    emailAttachmentMiddleware
 }
