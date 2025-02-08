@@ -21,7 +21,7 @@ app.use(isAdmin)
 app.post("/addnew",productImageMiddleware,createProduct)
 app.get("/allproductsforadmin", getAllProducts)
 // app.get("/all-quantity", allQuantites)
-app.put("/update/:id",updateById)
+app.patch("/update/:id",updateById)
 app.delete("/delete/:id",deleteById)
 
 export default app;

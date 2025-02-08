@@ -150,29 +150,32 @@ const deleteById = async (req, res, next) => {
     }
 };
 
-// Update product by ID
+
 const updateById = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { productName, quantity, stock, price, description, category, brand } = req.body;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ success: false, message: "Invalid product ID" });
         }
 
-        const updatedProduct = await Products.findById(id);
+        const updatedProduct = await Products.findByIdAndUpdate(
+            id,
+            { $set: req.body }, 
+            { new: true, runValidators: true } 
+        );
+
         if (!updatedProduct) {
             return res.status(404).json({ success: false, message: "Product not found" });
         }
-
-        Object.assign(updatedProduct, { productName, quantity, stock, price, description, category, brand });
-        await updatedProduct.save();
 
         res.status(200).json({ success: true, message: "Product updated successfully", updatedProduct });
     } catch (error) {
         next(error);
     }
 };
+
+export default updateById;
 
 
 const allQuantites = async(req,res)=>{
