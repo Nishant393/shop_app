@@ -1,28 +1,29 @@
-import nodemailer from "nodemailer"
-
-
-
+import nodemailer from "nodemailer";
 
 const sendMail = async (receiverEmail, subject, body) => {
   try {
-    console.log("env mail",process.env.EMAIL_USER)
-    
-    const res = await nodemailer.createTransport(
-      {
-      service: "gmail",
+    const transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT, 
+      secure: true, 
       auth: {
-        user:process.env.EMAIL_USER,
-        pass:process.env.EMAIL_PASS,
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
-    }
-    ).sendMail({
+    });
+    transporter.verify((err, success) => {
+      if (err) console.error(err);
+      console.log('Your config is correct');
+  });
+
+    const response = await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: receiverEmail,
       subject: subject,
       html: body,
     });
-    console.log("auth val",res)
-    console.log("Email sent successfully");
+
+    console.log("Email sent successfully:", response.messageId);
   } catch (error) {
     console.error("Error sending email:", error);
   }

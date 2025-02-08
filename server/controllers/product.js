@@ -1,4 +1,5 @@
 import { Products } from "../models/product.js";
+import { User } from "../models/user.js";
 import { uploadFilesToCloudinary } from "../utils/features.js";
 import mongoose from "mongoose";
 
@@ -90,21 +91,45 @@ const getProductById = async (req, res, next) => {
 };
 
 // Get all products with pagination
-const getAllProducts = async (req, res, next) => {
+// const getAllProducts = async (req, res, next) => {
+//     try {
+//         let { page = 1, limit = 50 } = req.query;
+//         page = parseInt(page, 10) || 1;
+//         limit = parseInt(limit, 10) || 50;
+
+//         const totalDocs = await Products.countDocuments();
+//         const products = await Products.find().skip((page - 1) * limit).limit(limit);
+
+//         res.set("X-Total-Count", totalDocs);
+//         res.status(200).json({ success: true, products });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
+ const getAllProducts = async (req, res, next) => {
     try {
-        let { page = 1, limit = 50 } = req.query;
-        page = parseInt(page, 10) || 1;
-        limit = parseInt(limit, 10) || 50;
+        const { category, brand, minPrice, maxPrice, sort, page = 1, limit = 50 } = req.query;
 
-        const totalDocs = await Products.countDocuments();
-        const products = await Products.find().skip((page - 1) * limit).limit(limit);
+        let filter = {};
+        if (category) filter.category = category;
+        if (brand) filter.brand = brand;
+        if (minPrice || maxPrice) filter.price = { 
+            ...(minPrice && { $gte: minPrice }), 
+            ...(maxPrice && { $lte: maxPrice }) 
+        };
 
-        res.set("X-Total-Count", totalDocs);
+        let query = Products.find(filter);
+        if (sort) query = query.sort(sort);
+        query = query.skip((page - 1) * limit).limit(Number(limit));
+
+        const products = await query;
         res.status(200).json({ success: true, products });
     } catch (error) {
         next(error);
     }
 };
+
 
 // Delete product by ID
 const deleteById = async (req, res, next) => {
@@ -149,4 +174,27 @@ const updateById = async (req, res, next) => {
     }
 };
 
-export { createProduct, getAllProducts, searchProduct, getProductById, deleteById, updateById };
+
+const allQuantites = async(req,res)=>{
+    try {
+        const allProductCount = await Products.find().countDocuments()
+        const alluserCount  = await User.find().select("email name").countDocuments()
+        const allCategoryCount = {
+            productCount:allProductCount,
+            userCount:alluserCount
+        }
+        // const wishlistCount =   
+        res.status(200).json ({
+            success:true, message:"all quantities ",
+            allCategoryCount
+
+        })
+    } catch (error) {
+        console.log(error)
+        
+    }
+
+}
+
+
+export { createProduct, getAllProducts, searchProduct, getProductById, deleteById, updateById, allQuantites };
