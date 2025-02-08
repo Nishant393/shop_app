@@ -8,14 +8,13 @@ import axios from 'axios';
 import server from '../../../../cofig/config';
 import toast from 'react-hot-toast';
 import { Edit2 } from 'lucide-react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 const EditProduct = () => {
 
     const [currency, setCurrency] = useState('kg');
     const [qty, setQty] = useState(0);
-    const { id } =useParams()
     const [isLoading, setIsLoading] = useState(false)
     const [product, setProduct] = useState({
         productName: "",
@@ -25,7 +24,9 @@ const EditProduct = () => {
         description: "",
         category: "",
         brand: "",
-    })
+    }) 
+    const { id } =useParams()
+    const naviagate= useNavigate()
 
     const getProductData = async()=>{
         try {
@@ -38,13 +39,16 @@ const EditProduct = () => {
           }
     }
 
-    const handelSubmit = async () => {
+    const handelSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`${server}product/update/${id}`, product)
+            await axios.put(`${server}product/update/${id}`, product,{withCredentials:true})
                 .then((e) => {
                     setIsLoading(false)
-                    console.log(e.data.success)
+
+                    if (e.data.success) {
+                        naviagate("/product-management")
+                    }
                     console.log(e.data.message)
                     toast.success(e.data.message);
                 }).catch((e) => {
@@ -77,9 +81,8 @@ const EditProduct = () => {
         <div className=' w-full my-5 lg:w-3/4  mx-auto flex rounded-lg shadow-lg justify-center bg-white  flex-col align-middle'>
             <h1 className='playwrite-vn-h1 text-slate-900 flex my-4 mx-auto' ><Edit2/>Edit Product</h1>
             <div className=' w-full mx-auto' >
-            <form target="_self"
+            <form
                     onSubmit={handelSubmit}
-                    method='get'
                     className='flex gap-5 px-7 flex-col' >
                     <div>
                         <span className='text-slate-600' >Product Name</span>
@@ -211,7 +214,7 @@ const EditProduct = () => {
                             }}
                         />
                     </div>
-                    <Button type='submit' sx={{ padding: "6px", margin: "30px" }} loading={isLoading} > Submit </Button>
+                    <Button type='submit' onClick={handelSubmit} sx={{ padding: "6px", margin: "30px" }} loading={isLoading} > Submit </Button>
                 </form>
             </div>
         </div>

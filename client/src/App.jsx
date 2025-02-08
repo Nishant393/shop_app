@@ -14,13 +14,14 @@ import NotFound from "./Root/Pages/NotFound";
 import { Toaster } from "react-hot-toast";
 import Dashboard from "./Root/Pages/Admin/AdminPages/Dashboard";
 import AddProducts from "./Root/Pages/Admin/AdminPages/AddProducts";
-import SendEmail from "./Root/Pages/Admin/AdminPages/SendEmail";
+import SendEmail from "./Root/Pages/Admin/AdminPages/SendNotification";
 import ProductItem from "./Root/Pages/ProductItem";
 import ProductManagement from "./Root/Pages/Admin/AdminPages/ProductManagement";
 import Notification from "./Root/Pages/Admin/AdminPages/Notification";
 import Profile from "./Root/Pages/Profile";
 import EditProduct from "./Root/Pages/Admin/AdminPages/EditProduct";
 import AdminRoot from "./Root/Pages/Admin/AdminRoot";
+import SendNotification from "./Root/Pages/Admin/AdminPages/SendNotification";
 
 
 const App = () => {
@@ -45,6 +46,7 @@ const App = () => {
             <Route path="/add-product" element={<AddProducts />} />
             <Route path="/edit-product/:id" element={<EditProduct />} />
             <Route path="/product-management" element={<ProductManagement />} />
+            <Route path="/send-notification" element={< SendNotification />} />
             <Route path="/notification" element={<Notification />} />
           </Route>
           <Route element={<Auth />}>
