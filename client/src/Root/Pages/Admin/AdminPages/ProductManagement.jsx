@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Edit, Plus, Minus, Trash2,  Search } from 'lucide-react';
+import { Edit, Plus, Minus, Trash2, Search } from 'lucide-react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import server from '../../../../cofig/config';
@@ -10,14 +10,13 @@ const ProductManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProduct] = useState([]);
 
-  const getAllProduct = ()=>{
+  const getAllProduct = () => {
     try {
-      axios.get(`${server}product/allproducts`).then(({data})=>{
+      axios.get(`${server}product/allproducts`).then(({data}) => {
         setProduct(data.products)
-        console.log(data.products)
       })
     } catch (error) {
-      
+      toast.error("Failed to fetch products")
     }
   }
 
@@ -28,119 +27,119 @@ const ProductManagement = () => {
     );
   }, [products, searchTerm]);
 
-  const handleIncrement = (id) => {
-    
-  };
-
-  const handleDecrement = (id) => {
-   
-  };
-
-  const handelDelete=async(id)=>{
-    console.log("id",id)
+  const handelIncrement = async (id , stock)=>{
+    console.log(id,stock)
     try {
-      axios.post(`${server}product/delete/${id}`).then((data)=>{
-        console.log(data)
-        toast.success(data.message || "delete succsessfully !!")
-        getAllProduct()
-      })
-    } catch ({error}) {
-      console.log(error)
-      toast.warning(error.message || "something went wrong !!")
+      stock++
+      console.log(id,stock)
+        await axios.put(`${server}product/update/${id}`, {
+          quantity:stock
+        },{withCredentials:true})
+            .then((e) => {
+                if (e.data.success) {
+                    naviagate("/product-management")
+                }
+                console.log(e.data.message)
+                toast.success(e.data.message);
+            }).catch((e) => {
+                toast.error(e.response.data.error.message);
+                console.log(e.response.data.error.message)
+                console.log(e.response.data.success)
+            })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+  const handelDelete = async(id) => {
+    try {
+      await axios.post(`${server}product/delete/${id}`, {}, {withCredentials:true});
+      toast.success("Product deleted successfully");
+      getAllProduct()
+    } catch (error) {
+      toast.error("Failed to delete product")
     }
   }
-
-  const handleProductEdit = (id, field, value) => {
-    
-  };
   
-  useEffect(()=>{
+  useEffect(() => {
     getAllProduct()
-  },[])
+  }, [])
 
   return (
-    <div className="p-4 min-h-screen max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4 flex gap-4 text-stone-700 "> <Search/> Search Product </h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 p-6">
+      <div className="max-w-4xl mx-auto bg-white/10 backdrop-blur-lg rounded-xl p-8 shadow-2xl">
+        <h1 className="text-3xl font-bold mb-6 flex items-center gap-4 text-white">
+          <Search className="text-white" /> 
+          Product Management
+        </h1>
 
-      <input
-        type="text"
-        placeholder="Search products by name or brand"
-        className="w-full px-3 py-2 border rounded-md mb-4"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-{
-  filteredProducts.length == 0 ?
-  (
-    <div className='w-full flex gap-5 my-4 flex-col ' >
-      <h1 className=' m-auto text-black' >
-       there is No product yet
-      </h1>
-      <h2 className='m-auto text-2xl' >
-      Add Product !</h2>
-      <Link to="/add-product" className=' m-auto' ><Button>add product</Button></Link>
-    </div>
-  )
-  :
-  (
-    <div className="overflow-x-auto">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="border p-2 text-left">Name</th>
-              <th className="border p-2 text-left">Brand</th>
-              <th className="border p-2 text-left">Price</th>
-              <th className="border p-2 text-left">Stock</th>
-              <th className="border p-2 text-left">Actions</th>
-              <th className="border p-2 text-left">Quantity</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredProducts.map((product) =>{ (
-              <tr key={product._id} className="hover:bg-gray-50">
-                <td className="border p-2">{product.productName}</td>
-                <td className="border p-2">{product.brand}</td>
-                <td className="border p-2">rs{product.price}</td>
-                <td className="border p-2">
-                  <div className="flex items-center space-x-2">
-                    <button
-                      className="p-1 border rounded hover:bg-gray-100"
-                      onClick={() => handleDecrement(product._id)}
-                    >
-                      <Minus className="h-4 w-4" />
-                    </button>
-                    <span>{product.stock}</span>
-                    <button
-                      className="p-1 border rounded hover:bg-gray-100"
-                      onClick={() => handleIncrement(product._id)}
-                    >
-                      <Plus className="h-4 w-4" />
-                    </button>
-                  </div>
-                </td>
-                <td className="border p-2">
-                  <button
-                    className="p-2 m-1 border rounded hover:bg-gray-100"
-                    onClick={() => toggleEdit(product._id)}
-                  >
-                    <Edit className="h-4 w-4" />
-                  </button>
-                  <button
-                    className="p-1  border rounded hover:bg-gray-100"
-                    onClick={() => handelDelete(product._id)}
-                  >
-                    <Trash2 Name="h-2 w-2" />
-                  </button>
-                </td>
-                <td className="border p-2" >{product.qty}</td>
-              </tr>
-            )})}
-          </tbody>
-        </table>
+        <input
+          type="text"
+          placeholder="Search products by name or brand"
+          className="w-full px-4 py-3 bg-white/20 text-white rounded-md mb-6 border border-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
+        {filteredProducts.length === 0 ? (
+          <div className='w-full flex flex-col items-center gap-5 text-white'>
+            <h1>No products available</h1>
+            <Link to="/add-product">
+              <Button variant="solid" color="primary">Add Product</Button>
+            </Link>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-white">
+              <thead>
+                <tr className="bg-white/20">
+                  {['Name', 'Brand', 'Price', 'Stock', 'Actions', 'Quantity'].map((header) => (
+                    <th key={header} className="border border-white/30 p-3 text-left">{header}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {filteredProducts.map((product) => (
+                  <tr key={product._id} className="hover:bg-white/10 transition-colors">
+                    <td className="border border-white/30 p-3">{product.productName}</td>
+                    <td className="border border-white/30 p-3">{product.brand}</td>
+                    <td className="border border-white/30 p-3">₹ {product.price}</td>
+                    <td className="border border-white/30 p-3">
+                      <div className="flex items-center space-x-2">
+                        <button className="p-1 rounded hover:bg-white/20">
+                          <Minus className="h-4 w-4 text-white" />
+                        </button>
+                        <span>{product.stock}</span>
+                        <button onClick={()=>handelIncrement(product._id , product.stock)}  className="p-1 rounded hover:bg-white/20">
+                          <Plus className="h-4 w-4 text-white" />
+                        </button>
+                      </div>
+                    </td>
+                    <td className="border border-white/30 p-3">
+                      <Link to={`/edit-product/${product._id}`} 
+                      className="inline-block rounded hover:bg-white/20">
+                        <button 
+                        className="p-2 m-1 mx-3 rounded"
+                      >
+
+                        <Edit className="h-4 w-4 text-white" />
+                      </button>
+                      </Link>
+                      <button 
+                        className="p-2 m-1 mx-3 rounded hover:bg-white/20"
+                        onClick={() => handelDelete(product._id)}
+                      >
+                        <Trash2 className="h-4 w-4 text-white" />
+                      </button>
+                    </td>
+                    <td className="border border-white/30 p-3">{product.quantity}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
-  )
-}
-      
     </div>
   );
 };
