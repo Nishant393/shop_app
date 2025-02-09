@@ -109,9 +109,10 @@ const getProductById = async (req, res, next) => {
 
  const getAllProducts = async (req, res, next) => {
     try {
-        const { category, brand, minPrice, maxPrice, sort, page = 1, limit = 50 } = req.query;
+        const {productName, category, brand, minPrice, maxPrice, sort, page = 1, limit = 50 } = req.query;
 
         let filter = {};
+        if (productName) filter.productName = { $regex: productName, $options: "i" }; 
         if (category) filter.category = category;
         if (brand) filter.brand = brand;
         if (minPrice || maxPrice) filter.price = { 
@@ -134,29 +135,28 @@ const getProductById = async (req, res, next) => {
 // Delete product by ID
 const deleteById = async (req, res, next) => {
     try {
-        const { id } = req.params;
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ success: false, message: "Invalid product ID" });
-        }
+        const product = await Products.findByIdAndDelete(req.params.id);
+        if (!product) return res.status(404).json({
+             success: false,
+            message: "Product not found" 
+        });
 
-        const deletedProduct = await Products.findByIdAndDelete(id);
-        if (!deletedProduct) {
-            return res.status(404).json({ success: false, message: "Product not found" });
-        }
-
-        res.status(200).json({ success: true, message: "Product deleted successfully" });
+        res.status(200).json({ 
+            success: true, 
+            message: "Product deleted successfully" 
+        });
     } catch (error) {
         next(error);
     }
 };
-
 
 const updateById = async (req, res, next) => {
     try {
         const { id } = req.params;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ success: false, message: "Invalid product ID" });
+            return res.status(400).json({ success: false,
+                 message: "Invalid product ID" });
         }
 
         const updatedProduct = await Products.findByIdAndUpdate(
@@ -185,8 +185,7 @@ const allQuantites = async(req,res)=>{
         const allCategoryCount = {
             productCount:allProductCount,
             userCount:alluserCount
-        }
-        // const wishlistCount =   
+        } 
         res.status(200).json ({
             success:true, message:"all quantities ",
             allCategoryCount
