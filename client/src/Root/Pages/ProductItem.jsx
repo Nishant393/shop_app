@@ -16,7 +16,10 @@ const ProductItem = () => {
     description: "",
     category: "",
     brand: "",
-    productURL: ""
+    productUrl: {
+      public_id:"",
+      url:""
+    }
   })
   const [isCartAdded, setIsCartAdded] = useState(false)
 
@@ -27,8 +30,8 @@ const ProductItem = () => {
 
   const fetchProductDetails = async () => {
     try {
-      const response = await axios.get(`${server}product/getbyid/${id}`)
-      setProduct(response.data.result)
+      const response = await axios.get(`${server}product/getbyid/${id}`, { withCredentials: true })
+      setProduct(response.data.product)
       setIsLoading(false)
     } catch (error) {
       setIsLoading(false)
@@ -37,10 +40,11 @@ const ProductItem = () => {
 
   const addToCartHandeler = async (quantity = 1) => {
     try {
-      await axios.post(`${server}cart/my/addtocart`, {
-        user: user.id, product: id, quantity
-      }).then((data) => {
+      await axios.post(`${server}cart/addtocart`, {
+        product: id, quantity
+      }, { withCredentials: true }).then((data) => {
         toast.success(data?.data.message)
+        console.log(data?.data.message)
       })
     } catch (error) {
       return error
@@ -54,12 +58,12 @@ const ProductItem = () => {
       return error
     }
   }
-  
+
   const getCartById = async () => {
     try {
-      await axios.get(`${server}cart/mycart/${user.id}`).then((data) => {
-        console.log("data",data?.data.result.find(item => item.product._id === id) !== undefined)
-        setIsCartAdded(data?.data.result.find(item => item.product._id === id) !== undefined)
+      await axios.get(`${server}cart/mycart/`, { withCredentials: true }).then((data) => {
+        console.log("data", data?.data.cartItems.find(item => item.product._id === id) !== undefined)
+        setIsCartAdded(data?.data.cartItems.find(item => item.product._id === id) !== undefined)
 
       })
 
@@ -87,8 +91,9 @@ const ProductItem = () => {
         {/* Product Image Section */}
         <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center">
           <div className="relative group">
+            { console.log(product.productUrl.url) }
             <img
-              src={"https://rukminim2.flixcart.com/image/280/280/kkwwu4w0/edible-oil/c/b/s/lite-pouch-sunflower-oil-priya-original-imagy5hsjbqyfhhh.jpeg?q=70" || product.productURL}
+              src={product.productUrl.url}
               alt={product.productName}
               className="max-w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105"
             />
@@ -134,7 +139,7 @@ const ProductItem = () => {
 
         {/* Product Details Section */}
         <div className="bg-white shadow-lg rounded-lg p-6">
-          <h1 className="text-3xl font-bold text-slate-900 mb-4">{product.productName}</h1>
+          <h1 className="text-3xl font-bold capitalize text-slate-900 mb-4">{product.productName}</h1>
 
           <div className="flex items-center mb-4">
             <h2 className="text-3xl text-green-600 font-semibold mr-4">₹{product.price}</h2>
@@ -155,7 +160,11 @@ const ProductItem = () => {
               </div>
               <div>
                 <span className="text-slate-600">Category:</span>
-                <p className="font-medium  text-blue-900 ">{product.category}</p>
+                <p className="font-medium  capitalize text-blue-900 ">{product.category ==0 ? "no" : product.category  }</p>
+              </div>
+              <div>
+                <span className="text-slate-600">Weight:</span>
+                <p className="font-medium  text-blue-900 ">{product.quantity}</p>
               </div>
               <div >
                 <span className="text-slate-600">Availability:</span>

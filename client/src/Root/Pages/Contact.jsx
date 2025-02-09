@@ -22,6 +22,9 @@ import {
   Instagram,
   LinkedIn
 } from '@mui/icons-material';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import server from '../../cofig/config';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -40,16 +43,23 @@ const Contact = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-    setOpenSnackbar(true);
-    setFormData({
-      name: '',
-      email: '',
-      subject: '',
-      message: ''
-    });
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    try {
+      await axios.post(`${server}email/send-emails`,formData).then((data)=>{
+        toast.success(data.data.message)
+      })
+
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      });
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   const handleCloseSnackbar = () => {
