@@ -99,6 +99,7 @@ export const AddProducts = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setProduct(prev => ({ ...prev, [name]: value }));
+        console.log(product)
     }
 
     return (
@@ -152,8 +153,13 @@ export const AddProducts = () => {
                             placeholder="Select Category"
                             required
                         >
-                            <Option value="dog">Dog</Option>
-                            <Option value="cat">Cat</Option>
+                            <Option value="staple" >Staple</Option>
+                            <Option value="ghee&oil" >Ghee & Oil</Option>
+                            <Option value="dryFruits">Dry Fruits</Option>
+                            <Option value="packageFood">Package Food</Option>
+                            <Option value="snacks">Snacks</Option>
+                            <Option value="houseHold">House Hold Care</Option>
+                            <Option value="dog">dog</Option>
                         </Select>
                     </div>
                 </div>
@@ -181,8 +187,8 @@ export const AddProducts = () => {
                             required
                             type="number"
                             name='stock'
-                            value={product.stock}
-                            onChange={handleChange}
+                            value={qty}
+                            onChange={qtyChange}
                             endDecorator={
                                 <Select
                                     variant="plain"

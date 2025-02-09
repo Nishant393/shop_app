@@ -11,12 +11,12 @@ import {
   Box,
   IconButton
 } from '@mui/material';
-import {Send} from '@mui/icons-material';
+import { Send } from '@mui/icons-material';
+import server from '../../../../cofig/config';
+import toast from 'react-hot-toast';
 
 const Notification = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
     subject: '',
     message: ''
   });
@@ -29,9 +29,12 @@ const Notification = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     try {
-
+      await axios.post(`${server}email/send-email`,formData).then((data)=>{
+        console.log(data)
+        toast.success(data.message)
+      })
     } catch (error) {
       console.log(error)
     }

@@ -42,7 +42,7 @@ const EditProduct = () => {
     const handelSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`${server}product/update/${id}`, product,{withCredentials:true})
+            await axios.patch(`${server}product/update/${id}`, product,{withCredentials:true})
                 .then((e) => {
                     setIsLoading(false)
 
@@ -192,6 +192,27 @@ const EditProduct = () => {
                                         <Divider orientation="vertical" />
                                     </Fragment>
                                 }
+                            />
+                        </div>
+                    </div>
+                    <div className='flex flex-col lg:flex-row  w-full gap-9' >
+                    <div className='lg:w-1/2 ' >
+                            <span className='text-slate-600' >no. of product</span>
+
+                            <Input
+                                type="number"
+                                fullWidth
+                                placeholder="00.00"
+                                required
+                                name='stock'
+                                onChange={handelChange}
+                                value={product.stock}
+                                sx={{
+                                    "--Input-radius": "11px",
+                                    "--Input-gap": "12px",
+                                    "--Input-minHeight": "52px",
+                                    "--Input-paddingInline": "15px"
+                                }}
                             />
                         </div>
                     </div>
