@@ -109,11 +109,12 @@ const getProductById = async (req, res, next) => {
 
  const getAllProducts = async (req, res, next) => {
     try {
-        const {productName, category, brand, minPrice, maxPrice, sort, page = 1, limit = 50 } = req.query;
+        const {productName, category, brand, minPrice, maxPrice,price, sort, page = 1, limit = 50 } = req.query;
 
         let filter = {};
-        if (productName) filter.productName = { $regex: productName, $options: "i" }; 
+        if (productName) filter.productName = { $regex: productName.toLowerCase, $options: "i" }; 
         if (category) filter.category = category;
+        if (price) filter.price = price;
         if (brand) filter.brand = brand;
         if (minPrice || maxPrice) filter.price = { 
             ...(minPrice && { $gte: minPrice }), 
@@ -121,7 +122,14 @@ const getProductById = async (req, res, next) => {
         };
 
         let query = Products.find(filter);
+        if (sortBy === "productName") {
+            query = query.collation({ locale: "en", strength: 2 }).sort({ productName: sortOrder === "asc" ? 1 : -1 });
+        } else if (sortBy === "price") {
+            query = query.sort({ price: sortOrder === "asc" ? 1 : -1 });
+        }
+
         if (sort) query = query.sort(sort);
+
         query = query.skip((page - 1) * limit).limit(Number(limit));
 
         const products = await query;
@@ -197,6 +205,5 @@ const allQuantites = async(req,res)=>{
     }
 
 }
-
 
 export { createProduct, getAllProducts, searchProduct, getProductById, deleteById, updateById, allQuantites };
