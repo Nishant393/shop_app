@@ -11,7 +11,7 @@ import emailRoute from "./routes/email.js";
 import userRoute from "./routes/user.js";
 import { corsOption } from "./utils/constant.js";
 import { connectDB } from "./utils/features.js";
-import { Console } from "console";
+
 
 try {
     dotenv.config({ path: "./.env" });

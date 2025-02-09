@@ -6,7 +6,7 @@ import { emailAttachmentMiddleware } from "../middlewares/multer.js";
 const app = express.Router()
 
 
-app.post("/send-email",emailAttachmentMiddleware,sendMailToAllUsers);
+app.post("/send-email",sendMailToAllUsers);
 
   
 export default app;

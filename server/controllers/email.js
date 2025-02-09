@@ -4,11 +4,11 @@ import { sendMail } from "../utils/email.js";
 const sendMailToAllUsers = async (req, res) => {
     try {
         const { subject, message } = req.body;
-        const attachments = req.files || [];
-        console.log(attachments)
-        if (!subject || !message) {
-            return res.status(400).json({ success: false, message: "Subject and message are required" });
-        }
+        // const attachments = req.files || [];
+        // console.log(attachments)
+        // if (!subject || !message) {
+        //     return res.status(400).json({ success: false, message: "Subject and message are required" });
+        // }
 
         const users = await User.find().select("email name");
         
@@ -20,10 +20,10 @@ const sendMailToAllUsers = async (req, res) => {
             const body = `
                 <p>Dear ${user.name},</p>
                 <p>${message}</p>
-                <img  src = ${attachments}/>
                 <p>Thank you</p>
             `;
-            return sendMail(user.email, subject,  body, attachments);
+            return sendMail(user.email, subject,  body, 
+            );
         });
 
         await Promise.all(emailPromises);

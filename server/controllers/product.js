@@ -90,35 +90,18 @@ const getProductById = async (req, res, next) => {
     }
 };
 
-// Get all products with pagination
-// const getAllProducts = async (req, res, next) => {
-//     try {
-//         let { page = 1, limit = 50 } = req.query;
-//         page = parseInt(page, 10) || 1;
-//         limit = parseInt(limit, 10) || 50;
 
-//         const totalDocs = await Products.countDocuments();
-//         const products = await Products.find().skip((page - 1) * limit).limit(limit);
-
-//         res.set("X-Total-Count", totalDocs);
-//         res.status(200).json({ success: true, products });
-//     } catch (error) {
-//         next(error);
-//     }
-// };
-
- const getAllProducts = async (req, res, next) => {
+const getAllProducts = async (req, res, next) => {
     try {
-        const {productName, category, brand, minPrice, maxPrice,price, sort, page = 1, limit = 50 } = req.query;
+        const { productName, category, brand, minPrice, maxPrice, sortBy = "productName", sortOrder = "asc", page = 1, limit = 50 } = req.query;
 
         let filter = {};
-        if (productName) filter.productName = { $regex: productName.toLowerCase, $options: "i" }; 
+        if (productName) filter.productName = { $regex: productName, $options: "i" };
         if (category) filter.category = category;
-        if (price) filter.price = price;
         if (brand) filter.brand = brand;
-        if (minPrice || maxPrice) filter.price = { 
-            ...(minPrice && { $gte: minPrice }), 
-            ...(maxPrice && { $lte: maxPrice }) 
+        if (minPrice || maxPrice) filter.price = {
+            ...(minPrice && { $gte: minPrice }),
+            ...(maxPrice && { $lte: maxPrice })
         };
 
         let query = Products.find(filter);
@@ -127,8 +110,6 @@ const getProductById = async (req, res, next) => {
         } else if (sortBy === "price") {
             query = query.sort({ price: sortOrder === "asc" ? 1 : -1 });
         }
-
-        if (sort) query = query.sort(sort);
 
         query = query.skip((page - 1) * limit).limit(Number(limit));
 
@@ -140,7 +121,6 @@ const getProductById = async (req, res, next) => {
 };
 
 
-// Delete product by ID
 const deleteById = async (req, res, next) => {
     try {
         const product = await Products.findByIdAndDelete(req.params.id);
