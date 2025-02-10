@@ -11,7 +11,7 @@ const schema = new Schema(
             type: Number,
             default: 0
         },
-        quantity: { type: String },
+        quantity: { type: Number },
         price: {
             type: Number,
             // required: true,

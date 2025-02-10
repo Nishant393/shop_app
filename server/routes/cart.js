@@ -1,18 +1,19 @@
 import express from "express";
 import { isAuthenticated } from "../middlewares/auth.js";
-import { createCart, deleteCart, getCart, updateCart } from "../controllers/cart.js";
+import { addToCart, clearCart, getCart, updateCartQuantity } from "../controllers/cart.js";
+
 
 
 const app = express.Router();
 
 app.use(isAuthenticated);
 
-app.post("/addtocart", createCart);
+app.post("/addtocart", addToCart);
 
 app.get("/mycart",getCart);
 
-app.patch("/update/:cartId", updateCart);
+app.patch("/update/:cartId",updateCartQuantity);
 
-app.delete("/remove/:cartId", deleteCart);
+app.patch("/clearcart/", clearCart);
 
 export default app;
