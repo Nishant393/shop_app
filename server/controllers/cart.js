@@ -94,69 +94,7 @@ export const getCart = async (req, res) => {
     }
 };
 
-// Update cart item quantity
-export const updateCart = async (req, res) => {
-    try {
-        const userId = req.user._id;  
-        console.log(userId)
-        // Get user ID from authenticated user
-        const { productId, quantity } = req.body;
-        console.log("productId",productId)
-        // Validate required fields
-        // if (!productId) {
-        //     return res.status(400).json({
-        //         success: false,
-        //         message: "Product ID is required"
-        //     });
-        // }
 
-        // Handle quantity validation
-        if (quantity !== undefined && quantity <= 0) {
-            // Delete cart item if quantity is 0 or negative
-            await Cart.findOneAndDelete({ 
-                user: userId, 
-                product: productId 
-            });
-            
-            return res.status(200).json({
-                success: true,
-                message: "Product removed from cart successfully"
-            });
-        }
-
-        // Find existing cart item
-        const cartItem = await Cart.findOne({
-            user: userId,
-            product: productId
-        });
-        console.log(cartItem)
-
-        // Update only if quantity is provided
-        if (quantity !== undefined) {
-            cartItem.quantity = quantity;
-            await cartItem.save();
-        }
-
-        // Populate product details after update
-        // await cartItem.populate({
-            // path: 'product',
-            // select: 'name price description productUrl'
-        // });
-
-        res.status(200).json({
-            success: true,
-            message: "Cart updated successfully",
-            cart: cartItem
-        });
-
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Error updating cart",
-            error: error.message
-        });
-    }
-};
 // Delete cart item
 export const deleteCart = async (req, res) => {
     try {
