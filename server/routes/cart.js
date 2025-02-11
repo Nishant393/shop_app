@@ -12,8 +12,9 @@ app.post("/addtocart", addToCart);
 
 app.get("/mycart",getCart);
 
-app.patch("/update/:cartId",updateCartQuantity);
+// app.patch("/update/",updateCartQuantity);
+app.patch('/update-quantity/:_id', updateCartQuantity);
 
-app.patch("/clearcart/", clearCart);
+app.delete("/clearcart/:cartid", clearCart);
 
 export default app;
