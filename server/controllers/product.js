@@ -90,7 +90,6 @@ const getProductById = async (req, res, next) => {
     }
 };
 
-
 const getAllProducts = async (req, res, next) => {
     try {
         const { productName, category, brand, minPrice, maxPrice, sortBy = "productName", sortOrder = "asc", page = 1, limit = 50 } = req.query;

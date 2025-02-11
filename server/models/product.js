@@ -14,16 +14,16 @@ const schema = new Schema(
         quantity: { type: Number },
         price: {
             type: Number,
-            // required: true,
+            required: true,
             min: 0
         },
         description: {
             type: String,
-            // required: true
+            required: true
         },
         category: {
             type: String,
-            // required: true
+            required: true
         },
         brand: { type: String },
         productUrl: {
