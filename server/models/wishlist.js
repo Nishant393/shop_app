@@ -5,12 +5,12 @@ const wishlistSchema = new Schema(
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true, // Corrected 'require' to 'required'
+      required: true, 
     },
     product: {
       type: Schema.Types.ObjectId,
       ref: "Product",
-      required: true, // Corrected 'require' to 'required'
+      required: true, 
     },
     note: {
       type: String,

@@ -110,6 +110,7 @@ export const addToCart = async (req, res) => {
       }
 
       cartItem = new Cart({
+    
         user: userId,
         product: { ...product.toObject() },
         quantity,
@@ -118,7 +119,11 @@ export const addToCart = async (req, res) => {
     }
 
     await cartItem.save();
-    res.status(200).json(cartItem);
+    res.status(200).json({
+      sucess:true,
+        message:"product added to cart",
+        cartItem
+    });
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: error.message });
@@ -141,6 +146,7 @@ export const getCart = async (req, res) => {
 
     res.status(200).json({
       success: true,
+      message:"cart fetched successfully",
       cartSummary,
     });
   } catch (error) {
@@ -172,7 +178,11 @@ export const clearCart = async (req, res) => {
 
     await Cart.deleteMany({ user: userId });
 
-    res.status(200).json({ message: "Cart cleared" });
+    res.status(200).json({
+      success:true,
+       message: "Cart cleared " 
+
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -272,6 +282,7 @@ console.log("cart", cartItem)
 
     res.status(200).json({
       success: true,
+      message:"card update succesfully",
       cartItem,
     });
   } catch (error) {
