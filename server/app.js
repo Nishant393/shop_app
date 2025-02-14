@@ -9,6 +9,7 @@ import cartRoute from "./routes/cart.js";
 import productRoute from "./routes/product.js";
 import emailRoute from "./routes/email.js";
 import userRoute from "./routes/user.js";
+import wishListRoute from "./routes/wishlist.js"
 import { corsOption } from "./utils/constant.js";
 import { connectDB } from "./utils/features.js";
 
@@ -34,10 +35,8 @@ app.use(cors(corsOption));
 
 try {
     connectDB(mongoUrl)
-    
 } catch (error) {
     console.log(error);
-    
 }
 
 try {
@@ -66,6 +65,7 @@ app.use("/user",userRoute);
 app.use("/product",productRoute)
 app.use("/email",emailRoute)
 app.use("/cart",cartRoute)
+app.use("/wishlist",wishListRoute)
 
 app.use(errorMiddleware)
 

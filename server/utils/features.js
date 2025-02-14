@@ -27,7 +27,7 @@ const sendToken = (res, user, code, message) => {
         throw new Error("Invalid user object");
     }
 
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' }); 
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '2d' }); 
     // Fixed env variable key
     console.log(token)
     return res.status(code)
