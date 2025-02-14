@@ -48,7 +48,7 @@ const mywishlist = async (req, res) => {
   try {
     const user = req.user;
 
-    // Find all wishlist items for the user and populate product details
+
     const wishlist = await Wishlist.find({ user: user._id })
       .populate("product") 
       .sort({ updatedAt: -1 });
