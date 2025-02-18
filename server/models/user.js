@@ -3,12 +3,12 @@ import { hash, compare } from "bcrypt";
 import crypto from "crypto";
 
 // Admin Middleware
-export const isAdmin = (req, res, next) => {
-    if (!req.user || !req.user.isAdmin) {
-        return res.status(403).json({ message: "Access denied. Admins only." });
-    }
-    next();
-};
+// export const isAdmin = (req, res, next) => {
+//     if (!req.user || !req.user.isAdmin) {
+//         return res.status(403).json({ message: "Access denied. Admins only." });
+//     }
+//     next();
+// };
 
 // User Schema
 const userSchema = new Schema(
