@@ -1,3 +1,4 @@
+
 import { Products } from "../models/product.js";
 import { Wishlist } from "../models/wishlist.js";
 
@@ -67,7 +68,21 @@ const mywishlist = async (req, res) => {
 };
 
 
+const removefromWishlist = async(req,res)=>{
 
+  const user = req.user._id;
+  if (!user) {
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized. Please log in.",
+    })
+  }
+  const deletedProduct = await Wishlist.findByIdAndDelete(user)
+  console.log(deletedProduct)
+  return res.status(200).json({
+    success: false,
+    message: "product deleted succesfully",
+  })
 
-
-export { addToWishList ,mywishlist};
+}
+export { addToWishList ,mywishlist, removefromWishlist};

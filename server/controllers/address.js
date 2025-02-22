@@ -1,4 +1,5 @@
 import { Address } from "../models/address.js";
+import { User } from "../models/user.js";
 
 // CREATE Address
 export const createAddress = async (req, res) => {
@@ -116,38 +117,34 @@ export const updateAddress = async (req, res) => {
   }
 };
 
-// DELETE Address (Only Logged-in User Can Delete Their Address)
 export const deleteAddress = async (req, res) => {
-  const user = req.user?._id;
-
   try {
+    console.log("request",req.body, req.params, req.query)
+    const user = req.user._id;
     if (!user) {
       return res.status(401).json({
         success: false,
         message: "Unauthorized. Please log in.",
       });
     }
-
-    // Find and delete only the address belonging to the logged-in user
-    const address = await Address.findAndDelete(user);
-
-    if (!address) {
+    const address = await Address.findOneAndDelete({ user });
+    if (!address || address === null) {
       return res.status(404).json({
         success: false,
         message: "Address not found",
       });
     }
-console.log(address)
+console.log("address", address)
     res.status(200).json({
       success: true,
       message: "Address deleted successfully",
-    });
+    })
   } catch (error) {
     console.error("Error deleting address:", error);
     res.status(500).json({
       success: false,
       message: "Error deleting address",
-      error: error.message,
     });
   }
 };
+
