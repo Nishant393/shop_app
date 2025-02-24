@@ -55,16 +55,17 @@ const ProductManagement = () => {
   }
 
   const filteredProducts = useMemo(() => {
+    console.log("products",products)
     return products.filter(product =>
-      product.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.brand.toLowerCase().includes(searchTerm.toLowerCase())
+      product.productName.includes(searchTerm) ||
+      product.brand.includes(searchTerm)
     );
   }, [products, searchTerm]);
 
-  const handelIncrement = async (id, stock) => {
+  const handelIncrement = async () => {
     try {
       stock++
-      await axios.patch(`${server}product/update/${id}`, {
+      await axios.put(`${server}product/update-qty/${cart}`, {
         stock: stock
       }, {withCredentials: true})
         .then((e) => {
@@ -83,10 +84,10 @@ const ProductManagement = () => {
   }
   const handelDecrement = async (id, stock) => {
     try {
-      if(stock >= 0 ){
+      if(stock > 0 ){
         stock--
       }
-      await axios.patch(`${server}product/update/${id}`, {
+      await axios.put(`${server}product/update-qty/${id}`, {
         stock: stock
       }, {withCredentials: true})
         .then((e) => {

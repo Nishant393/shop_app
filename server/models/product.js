@@ -5,13 +5,13 @@ const schema = new Schema(
     {
         productName: {
             type: String,
-            required: true
+            // required: true
         },
         stock: {
             type: Number,
             default: 0
         },
-        quantity: { type: Number },
+        quantity: { type: String },
         price: {
             type: Number,
             required: true,

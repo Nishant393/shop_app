@@ -2,7 +2,7 @@
 
 
 import express from "express";
-import { allQuantites, createProduct, deleteById, getAllProducts, getProductById, searchProduct, updateById } from "../controllers/product.js";
+import { allQuantites, createProduct, deleteById, getAllProducts, getProductById, searchProduct, updateById, updateQtyById } from "../controllers/product.js";
 
 import { productImageMiddleware } from "../middlewares/multer.js";
 import { isAdmin } from "../middlewares/admin.js";
@@ -22,6 +22,7 @@ app.post("/addnew",productImageMiddleware,createProduct)
 // app.get("/allproductsforadmin", getAllProducts)
 app.get("/all-quantity", allQuantites)
 app.put("/update/:id",updateById)
+app.put("/update-qty/:id",updateQtyById)
 app.delete("/delete/:id",deleteById)
 
 export default app;

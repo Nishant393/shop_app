@@ -180,13 +180,12 @@ export const updateCartQuantity = async (req, res) => {
     const { cartId } = req.params;
     const { quantity } = req.body;
     const userId = req.user._id;
-
+    
     if (quantity <= 0) {
       return res.status(400).json({ message: "Quantity must be at least 1" });
     }
 
-    // Find the cart item by its cartId and userId
-    const cartItem = await Cart.findOne({ _id: cartId, user: userId }).populate("product");
+    const cartItem = await Cart.findOne({ _id: cartId, user: userId }).populate("product")
 
     if (!cartItem) {
       return res.status(404).json({ message: "Cart item not found" });
