@@ -16,7 +16,7 @@ export const AddProducts = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [product, setProduct] = useState({
         productName: "",
-        stock: "",
+        stock: 0,
         quantity: "",
         price: "",
         description: "",

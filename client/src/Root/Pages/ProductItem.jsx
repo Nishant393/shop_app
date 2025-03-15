@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Heart, ShoppingCart, Check, Star, FenceIcon } from 'lucide-react'
 import axios from 'axios'
 import server from '../../cofig/config'
 import FeedBack from '../../component/FeedBack'
 import { useUserContext } from "../../Provider/AuthContext.jsx"
 import toast from 'react-hot-toast'
+import { filledInputClasses } from '@mui/material'
 
 const ProductItem = () => {
 
@@ -17,16 +18,17 @@ const ProductItem = () => {
     category: "",
     brand: "",
     productUrl: {
-      public_id:"",
-      url:""
+      public_id: "",
+      url: ""
     }
   })
   const [isCartAdded, setIsCartAdded] = useState(false)
-
-  const { id } = useParams()
   const [isLoading, setIsLoading] = useState(true)
 
-  const { user } = useUserContext()
+  const { id } = useParams()
+  const navigate = useNavigate()
+  const { user, isAuthanticated } = useUserContext()
+
 
   const fetchProductDetails = async () => {
     try {
@@ -39,34 +41,58 @@ const ProductItem = () => {
   }
 
   const addToCartHandeler = async (quantity = 1) => {
-    try {
-      await axios.post(`${server}cart/addtocart`, {
-        product: id, quantity
-      }, { withCredentials: true }).then((data) => {
-        toast.success(data?.data.message)
-        console.log(data?.data.message)
-      })
-    } catch (error) {
-      return error
+
+    if (isAuthanticated) {
+      try {
+        await axios.post(`${server}cart/addtocart`, {
+          productId: id, quantity: 1
+        }, { withCredentials: true }).then((data) => {
+          toast.success(data?.data.message)
+          console.log(data?.data.message)
+          console.log(data)
+        })
+      } catch (error) {
+        console.log(error)
+        return error
+      }
     }
+    else {
+      navigate("/sign-in")
+    }
+
   }
 
   const likeHandler = async () => {
-    try {
-      console.log("like")
-    } catch (error) {
-      return error
+    if (isAuthanticated) {
+      try {
+        await axios.post(`${server}wishlist/add`, {
+          productId: id, quantity: 1
+        }, { withCredentials: true }).then((data) => {
+          toast.success(data?.data.message)
+          console.log(data?.data.message)
+          console.log(data)
+        })
+      } catch (error) {
+        console.log(error)
+        return error
+      }
     }
+    else {
+      navigate("/sign-in")
+    }
+
   }
 
-  const getCartById = async () => {
+  const getCart = async () => {
     try {
-      await axios.get(`${server}cart/mycart/`, { withCredentials: true }).then((data) => {
-        console.log("data", data?.data.cartItems.find(item => item.product._id === id) !== undefined)
-        setIsCartAdded(data?.data.cartItems.find(item => item.product._id === id) !== undefined)
+      await axios.get(`${server}cart/mycart/`,product,user, { withCredentials: true }).then((data) => {
+
+        const filtered = data?.data.cartSummary.items.filter((e) => { return e.product == id })
+        console.log("data", filtered, filtered.length === 0 ? false : true)
+
+        setIsCartAdded(filtered.length === 0 ? false : true)
 
       })
-
     } catch (error) {
       console.log(error)
     }
@@ -74,7 +100,7 @@ const ProductItem = () => {
 
   useEffect(() => {
     fetchProductDetails()
-    getCartById()
+    getCart()
   }, [user])
 
   if (isLoading) {
@@ -91,7 +117,7 @@ const ProductItem = () => {
         {/* Product Image Section */}
         <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center">
           <div className="relative group">
-            { console.log(product.productUrl.url) }
+            {console.log(product.productUrl.url)}
             <img
               src={product.productUrl.url}
               alt={product.productName}
@@ -106,8 +132,10 @@ const ProductItem = () => {
           </div>
 
           <div className="mt-6 w-full flex space-x-4">
-            <button
-              className="flex-1 flex items-center justify-center 
+            {
+              isCartAdded ?
+                <button
+                  className="flex-1 flex items-center justify-center 
                 bg-gradient-to-r from-blue-400 to-blue-600 
                 text-white 
                 py-3 
@@ -115,11 +143,29 @@ const ProductItem = () => {
                 hover:from-blue-500 hover:to-blue-700 
                 transition-all 
                 group"
-              onClick={() => addToCartHandeler()}
-            >
-              <ShoppingCart className="mr-2 group-hover:scale-110 transition-transform" />
-              {isCartAdded ? " Go to cart" : "Add to Cart"}
-            </button>
+                >
+                  <Link className='flex' to={"/cart"} >
+                    <ShoppingCart className="mr-2 group-hover:scale-110 transition-transform" />
+                    Go to cart
+                  </Link>
+                </button>
+                :
+                <button
+                  className="flex-1 flex items-center justify-center 
+                bg-gradient-to-r from-blue-400 to-blue-600 
+                text-white 
+                py-3 
+                rounded-lg 
+                hover:from-blue-500 hover:to-blue-700 
+                transition-all 
+                group"
+                  onClick={() => addToCartHandeler()}
+                >
+                  <ShoppingCart className="mr-2 group-hover:scale-110 transition-transform" />
+                  Add to Cart
+                </button>
+            }
+
 
             <button
               className="flex-1 flex items-center justify-center 
@@ -160,7 +206,7 @@ const ProductItem = () => {
               </div>
               <div>
                 <span className="text-slate-600">Category:</span>
-                <p className="font-medium  capitalize text-blue-900 ">{product.category ==0 ? "no" : product.category  }</p>
+                <p className="font-medium  capitalize text-blue-900 ">{product.category == 0 ? "no" : product.category}</p>
               </div>
               <div>
                 <span className="text-slate-600">Weight:</span>

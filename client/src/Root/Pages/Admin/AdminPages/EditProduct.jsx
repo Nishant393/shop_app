@@ -42,10 +42,9 @@ const EditProduct = () => {
     const handelSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.patch(`${server}product/update/${id}`, product,{withCredentials:true})
+            await axios.put(`${server}product/update/${id}`, product,{withCredentials:true})
                 .then((e) => {
                     setIsLoading(false)
-
                     if (e.data.success) {
                         naviagate("/product-management")
                     }

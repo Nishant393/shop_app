@@ -161,6 +161,30 @@ const updateById = async (req, res, next) => {
     }
 };
 
+const updateQtyById = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { stock } = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ success: false,
+                 message: "Invalid product ID" });
+        }
+
+        const updatedProduct = await Products.findById(id);
+        if (!updatedProduct) {
+            return res.status(404).json({ success: false, message: "Product not found" });
+        }
+
+        Object.assign(updatedProduct, { stock });
+        await updatedProduct.save();
+
+        res.status(200).json({ success: true, message: "Product updated successfully", updatedProduct });
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 const allQuantites = async(req,res)=>{
     try {
@@ -182,4 +206,4 @@ const allQuantites = async(req,res)=>{
 
 }
 
-export { createProduct, getAllProducts, searchProduct, getProductById, deleteById, updateById, allQuantites };
+export { createProduct, getAllProducts, searchProduct, getProductById, deleteById, updateById, allQuantites , updateQtyById };
