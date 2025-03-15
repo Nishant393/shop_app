@@ -37,8 +37,8 @@ const login = async (req, res, next) => {
         const { email, password } = req.body;
         console.log("email", email, "pass",password)
         const user = await User.findOne({ email }).select("+password");
-        console.log(user.password,password)
-        console.log(!user, await bcrypt.compare(password , user.password))
+        // console.log(user.password,password)
+        console.log(user,(await bcrypt.compare(password, user.password)) )
         
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return next(new ErrorHandler("Invalid email or password", 401));

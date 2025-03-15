@@ -75,6 +75,13 @@ const sendMailToAllAdmin = async (req, res) => {
 };
 
 
+const sendOrderDetailstoUser = (req,res)=>{
+
+    const {email} = req.params ;
+    
+
+}
+
 
 
 export { sendMailToAllUsers , sendMailToAllAdmin };

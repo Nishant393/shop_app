@@ -11,6 +11,7 @@ import emailRoute from "./routes/email.js";
 import userRoute from "./routes/user.js";
 import wishListRoute from "./routes/wishlist.js";
 import AddressRoute from "./routes/address.js"
+import orderRoutes from "./routes/order.js"
 import { corsOption } from "./utils/constant.js";
 import { connectDB } from "./utils/features.js";
 
@@ -68,6 +69,8 @@ app.use("/email",emailRoute)
 app.use("/cart",cartRoute)
 app.use("/wishlist",wishListRoute)
 app.use("/address",AddressRoute)
+app.use("/order",orderRoutes )
+
 
 app.use(errorMiddleware)
 

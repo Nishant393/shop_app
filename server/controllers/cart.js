@@ -53,7 +53,6 @@ import { Products } from "../models/product.js";
 // };
 
 
-
 export const addToCart = async (req, res) => {
   try {
     const { productId, quantity = 1 } = req.body;
@@ -173,8 +172,6 @@ export const removeFromCart = async (req, res) => {
   }
 };
 
-
-
 export const updateCartQuantity = async (req, res) => {
   try {
     const { cartId } = req.params;
@@ -219,5 +216,21 @@ export const updateCartQuantity = async (req, res) => {
     console.error("Update cart error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
+};
+
+
+export const getcartById = async(req,res) =>{
+
+    try {
+      const {cartId} = req.params.id;
+        const cartDetails = await Cart.findById(req.params.id).populate('product');
+        if (!cartDetails) {
+            return res.status(404).json({ message: 'Cart not found' });
+        }
+        res.status(200).json(cartDetails);
+    } catch (error) {
+      console.log(error)
+        res.status(500).json({ message: 'Server error', error });
+    }
 };
 
